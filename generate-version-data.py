@@ -41,9 +41,9 @@ if __name__ == "__main__":
     version_data = [{
         "version": "",
         "release_date": "",
-        "criticality_score": "",
-        "scorecard": "",
-        "cve_details": ""
+        "criticality_score": "Not Available",
+        "scorecard": "Not Available",
+        "cve_details": "Not Available"
     }]
     write_version(id, version_data)
     

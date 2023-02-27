@@ -39,19 +39,46 @@ function __acc_get_version_hash
 
 function __acc_set_conf
 {
-	while read -r user_configs; do
-		if echo $user_configs | grep -q "^#"
+    local param values
+	while read -r configs; do
+		if echo $configs | grep -q "^#"
 			then
 				continue
 		fi
-		echo $user_configs > tmp.txt
-		local user_config_param=$(cut -d "=" -f 1 tmp.txt)
-		local user_config_values=$(cut -d "=" -f 2 tmp.txt)
-		unset $user_config_param
-		export $user_config_param=$user_config_values
+        param=$(echo $configs | cut -d "=" -f 1)
+        values=$(echo $configs | cut -d "=" -f 2)
+		export $param=$values
 	done < acc-config.cfg
     [[ -f tmp.txt ]] && rm tmp.txt 
 
+}
+
+function __acc_get_scorecard
+{
+    local id=$1
+    local name=$2
+    
+    python3 get-scorecard-data.py $id $name
+}
+
+function __acc_get_criticality_score
+{
+    local id=$1
+    local name=$2
+    
+    [[ -z $GITHUB_AUTH_TOKEN ]] && echo "
+    Run the below command 
+    
+    $ export GITHUB_AUTH_TOKEN=<your access token>
+    
+    You can also update the same in acc-config.cfg file.
+    " && return 1
+    
+    criticality_score --repo github.com/Be-Secure/$name --format json >> criticality_score.json
+
+    python3 get-criticality_score-data.py $id $name
+
+    [[ -f criticality_score.json ]] && rm criticality_score.json
 }
 
 function __acc_run
@@ -62,6 +89,8 @@ function __acc_run
     __acc_generate_ossp_data $id $name
     __acc_generate_version_data $id $name
     __acc_get_version_hash $id $name
+    __acc_get_scorecard $id $name
+    __acc_get_criticality_score $id $name || return 1
 
 }
 
