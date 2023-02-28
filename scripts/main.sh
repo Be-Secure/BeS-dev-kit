@@ -29,7 +29,6 @@ function __acc_get_version_hash
     git clone -q https://github.com/$GITHUB_ORG/$name $ACC_ROOT_DIR/repo/$name
 
     cd $ACC_ROOT_DIR/repo/$name
-    ls
     local tag_hash=$(git show-ref --tags | grep -w "$version" | cut -d " " -f 1)
     [[ -z $tag_hash ]] && echo "Could not find version $version under repo $name" && return 1 
     cd $ACC_ROOT_DIR/scripts
@@ -110,15 +109,13 @@ function __acc_run
     __acc_get_version_hash $id $name || return 1
     echo ""
     echo "Version details are placed under $BESLIGHTHOUSE_DIR/bes_theme/assets/data/version_details/$id-$name-Versiondetails.json"
-
+    echo ""
     local version=$(cat $ACC_ROOT_DIR/tmp_file)
     echo "Trying to fetching scorecard results..."
-    echo ""
     __acc_get_scorecard $id $name
     [[ $? == 0 ]] && echo "Scorecard results are placed under $DATASTORE_DIR/$name/$version/scorecard/$name-$version-scorecard-report.json"
     echo ""
     echo "Trying to fetching criticality score results..."
-    echo ""
     __acc_get_criticality_score $id $name 
     [[ $? == 0 ]] && echo "Criticality score results are placed under $DATASTORE_DIR/$name/$version/criticality_score/$name-$version-criticality_score-report.json"
     __acc_cleanup
