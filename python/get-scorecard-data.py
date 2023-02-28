@@ -24,8 +24,10 @@ def update_scorecard(id, name, project_version):
 
 def write_scorecard_data(id, name):
     
-    
-    raw_data = urlopen("https://api.securityscorecards.dev/projects/github.com/Be-Secure/"+name)
+    try:
+        raw_data = urlopen("https://api.securityscorecards.dev/projects/github.com/"+namespace+"/"+name)
+    except Exception as e:
+        sys.exit(str(e))
     scorecard_data = json.loads(raw_data.read())
     
     version_file = open(dashboard_dir+"/bes_theme/assets/data/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r")
@@ -46,7 +48,7 @@ def write_scorecard_data(id, name):
     
 
 if __name__ == "__main__":
-    
+    namespace = os.environ['GITHUB_ORG']
     id = sys.argv[1]
     name = sys.argv[2]
     dashboard_dir = os.environ['BESLIGHTHOUSE_DIR']

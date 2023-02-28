@@ -5,9 +5,9 @@ from urllib.request import urlopen
 
 def write_version(bes_id, version_data):
     
-    tmp_file = open("tmp_file", "w")
+    tmp_file = open(acc_root_dir+"/tmp_file", "w")
     
-    raw_data = urlopen("https://api.github.com/repos/Be-Secure/BeSLighthouse/issues/"+str(bes_id))
+    raw_data = urlopen("https://api.github.com/repos/"+namespace+"/BeSLighthouse/issues/"+str(bes_id))
 
     data = json.loads(raw_data.read())
     # print(data["body"])
@@ -32,6 +32,8 @@ def write_version(bes_id, version_data):
 
 if __name__ == "__main__":
     
+    namespace = os.environ['GITHUB_ORG']
+    acc_root_dir = os.environ['ACC_ROOT_DIR']
     id = sys.argv[1]
     name = sys.argv[2]
     dir = os.environ['BESLIGHTHOUSE_DIR']

@@ -7,8 +7,10 @@ import os
 
 
 def write_release_date(name, tag_hash, json_data):
-
-    raw_data = urlopen("https://api.github.com/repos/Be-Secure/"+name+"/git/tags/" + tag_hash)
+    try:
+        raw_data = urlopen("https://api.github.com/repos/"+namespace+"/"+name+"/git/tags/" + tag_hash)
+    except Exception as e:
+        sys.exit(str(e))
     data = json.loads(raw_data.read())
     raw_date = data["tagger"]["date"]
     # print (data["tagger"]["date"])
@@ -26,6 +28,7 @@ def write_release_date(name, tag_hash, json_data):
     f.truncate()
 if __name__ == "__main__":
     
+    namespace = os.environ['GITHUB_ORG']
     id = sys.argv[1]
     name = sys.argv[2]
     tag_hash = sys.argv[3]

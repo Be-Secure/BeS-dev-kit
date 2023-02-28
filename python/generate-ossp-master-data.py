@@ -1,8 +1,9 @@
 import json
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 import sys
 from urllib.request import urlopen
 import requests
+import os
 
 def write_to_osspcve(soup, issue_id):
     maintain_table = soup.find('div', attrs={'id':'contentdiv'})
@@ -81,7 +82,7 @@ def write_cve_data(issue_id,f):
         
 def check_issue_exists(id):
     try:
-        x = urlopen('https://github.com/Be-Secure/BeSLighthouse/issues/'+id)
+        x = urlopen('https://github.com/'+namespace+'/BeSLighthouse/issues/'+id)
     except Exception as e:
         print("Could not find issue with id : "+id)
         sys.exit(str(e))
@@ -118,7 +119,7 @@ def write_project_repos_data(file_pointer, project_data):
 
 
 def write_tags(f, bes_id):
-    url = 'https://api.github.com/repos/Be-Secure/BeSLighthouse/issues/'+str(bes_id)+'/labels'
+    url = 'https://api.github.com/repos/'+namespace+'/BeSLighthouse/issues/'+str(bes_id)+'/labels'
     tags_json_data = urlopen(url)
     tags_dict = json.loads(tags_json_data.read())
     tags = []
@@ -128,7 +129,7 @@ def write_tags(f, bes_id):
 
 
 def write_tech_stack(bes_id):
-    raw_data = urlopen("https://api.github.com/repos/Be-Secure/BeSLighthouse/issues/"+str(bes_id))
+    raw_data = urlopen("https://api.github.com/repos/"+namespace+"/BeSLighthouse/issues/"+str(bes_id))
 
     data = json.loads(raw_data.read())
 
@@ -148,7 +149,7 @@ def write_tech_stack(bes_id):
             break
 
 def write_languages(name):
-    raw_data = urlopen("https://api.github.com/repos/Be-Secure/"+name+"/languages")
+    raw_data = urlopen("https://api.github.com/repos/"+namespace+"/"+name+"/languages")
     data = json.loads(raw_data.read())
     # languages=[]
     # for i in range(len(data)):
@@ -158,26 +159,26 @@ def write_languages(name):
 
 if __name__ == "__main__":
     
-    # bes_id, project_name = input("Enter id and name as <id> <name>:").split()
-    # print("argument1:"+ sys.argv[1])
+    acc_root_dir = os.environ['ACC_ROOT_DIR']
+    namespace = os.environ['GITHUB_ORG']
     bes_id = sys.argv[1]
     project_name = sys.argv[2]
     check_issue_exists(bes_id)
     repo_keys = [ "bes_id", "bes_tracking_id", "issue_url", "name", "full_name", "description", "bes_technology_stack", "watchers_count", "forks_count", "stargazers_count", "size", "open_issues", "created_at", "updated_at", "pushed_at", "git_url", "clone_url", "html_url", "homepage", "owner", "project_repos", "license", "language", "tags" ]
     try:
-        json_data = urlopen('https://api.github.com/repos/Be-Secure/'+project_name)
+        json_data = urlopen('https://api.github.com/repos/'+namespace+'/'+project_name)
     except Exception as e:
-        print("Could not find "+ project_name +" under Be-Secure")
+        print("Could not find "+ project_name +" under "+namespace)
         sys.exit(str(e))
     project_data = json.loads(json_data.read())
-    f = open("ossp_data.json", "w")
+    f = open(acc_root_dir+"/ossp_data.json", "w")
     f.write("{\n")
     for i in repo_keys:
         # if i == "cve_details" :
         #     write_cve_data(bes_id, f)
         
         if i == "issue_url":
-            f.write('"issue_url": ' + '"https://github.com/Be-Secure/BeSLighthouse/issues/' + str(bes_id) +'",\n')
+            f.write('"issue_url": ' + '"https://github.com/'+namespace+'/BeSLighthouse/issues/' + str(bes_id) +'",\n')
         elif i == "bes_technology_stack":
             write_tech_stack(bes_id)
         elif i == "project_repos":
@@ -197,7 +198,7 @@ if __name__ == "__main__":
     f.write("},\n")
     # print(f)
     f.close()
-    f = open("ossp_data.json", "r")
+    f = open(acc_root_dir+"/ossp_data.json", "r")
     print(f.read())
 
     
