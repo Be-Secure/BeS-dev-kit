@@ -48,7 +48,7 @@ function __acc_set_conf
         value=$(echo $configs | cut -d "=" -f 2)
         [[ -z $value ]] && echo "Please set the value for $param before running the script" && return 1
 		export $param=$value
-	done < $HOME/besecure-dashboard-accelerator/acc-config.cfg
+	done < $HOME/besecure-developer-toolkit/acc-config.cfg
 }
 
 function __acc_get_scorecard
