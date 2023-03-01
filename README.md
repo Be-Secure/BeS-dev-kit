@@ -20,6 +20,6 @@ It can generate the following data -
 
 ## Usage
 1. Open terminal
-2. Using the below command, run [main.sh](scripts/main.sh) file.
+2. Using the below command, run [osspoi-meta-data-generator.sh](scripts/osspoi-meta-data-generator.sh) file.
     
-    `$ ./main.sh`
+    `$ ./osspoi-meta-data-generator.sh`
