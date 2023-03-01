@@ -1,6 +1,12 @@
-# bes-dashboard-accelerator
+# besecure-developer-toolkit
 
-Accelerator for generation of data for BeSLighthouse dashboard visualisation.
+The toolkit helps you to quickly generate meta data for BeSLighthouse visualisation. 
+
+It can generate the following data - 
+- ossp-master
+- version details
+- scorecard
+- criticality score
 
 ## Pre-requisites
 
@@ -8,6 +14,7 @@ Accelerator for generation of data for BeSLighthouse dashboard visualisation.
 2. GitHub personal access token (classic).
 3. Set all the variables under [config](acc-config.cfg) file.
 4. Make sure the format of the version is correct under [BeSLighthouse/issues](https://github.com/Be-Secure/BeSLighthouse/issues).
+5. Please provide the name of the project exactly as is given in their repository.
    
     ` Note:- Make sure you give the complete path to the directories`
 
