@@ -13,8 +13,11 @@ It can generate the following data -
 1. Python 3.x
 2. GitHub personal access token (classic).
 3. Set all the variables under [config](acc-config.cfg) file.
-4. Make sure the format of the version is correct under [BeSLighthouse/issues](https://github.com/Be-Secure/BeSLighthouse/issues).
-5. Please provide the name of the project exactly as is given in their repository.
+
+## Keep in mind
+
+1. Make sure the format of the version is correct under [BeSLighthouse/issues](https://github.com/Be-Secure/BeSLighthouse/issues).
+2. Name of the project is case-sensitive. Please provide the name of the project exactly as is given in their repository.
    
     ` Note:- Make sure you give the complete path to the directories`
 
