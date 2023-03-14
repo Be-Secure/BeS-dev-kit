@@ -16,7 +16,7 @@ It can generate the following data -
 
 ## Keep in mind
 
-1. Make sure the format of the version is correct under [BeSLighthouse/issues](https://github.com/Be-Secure/BeSLighthouse/issues).
+1. Make sure the format of the version is correct under [Be-Secure/issues](https://github.com/Be-Secure/Be-Secure/issues).
 2. Name of the project is case-sensitive. Please provide the name of the project exactly as is given in their repository.
    
     ` Note:- Make sure you give the complete path to the directories`
