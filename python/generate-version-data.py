@@ -7,7 +7,7 @@ def write_version(bes_id, version_data):
     
     tmp_file = open(acc_root_dir+"/tmp_file", "w")
     
-    raw_data = urlopen("https://api.github.com/repos/"+namespace+"/BeSLighthouse/issues/"+str(bes_id))
+    raw_data = urlopen("https://api.github.com/repos/"+namespace+"/Be-Secure/issues/"+str(bes_id))
 
     data = json.loads(raw_data.read())
     # print(data["body"])

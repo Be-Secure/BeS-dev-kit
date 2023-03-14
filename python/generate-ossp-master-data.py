@@ -82,7 +82,7 @@ def write_cve_data(issue_id,f):
         
 def check_issue_exists(id):
     try:
-        x = urlopen('https://github.com/'+namespace+'/BeSLighthouse/issues/'+id)
+        x = urlopen('https://github.com/'+namespace+'/Be-Secure/issues/'+id)
     except Exception as e:
         print("Could not find issue with id : "+id)
         sys.exit(str(e))
@@ -119,7 +119,7 @@ def write_project_repos_data(file_pointer, project_data):
 
 
 def write_tags(f, bes_id):
-    url = 'https://api.github.com/repos/'+namespace+'/BeSLighthouse/issues/'+str(bes_id)+'/labels'
+    url = 'https://api.github.com/repos/'+namespace+'/Be-Secure/issues/'+str(bes_id)+'/labels'
     tags_json_data = urlopen(url)
     tags_dict = json.loads(tags_json_data.read())
     tags = []
@@ -129,7 +129,7 @@ def write_tags(f, bes_id):
 
 
 def write_tech_stack(bes_id):
-    raw_data = urlopen("https://api.github.com/repos/"+namespace+"/BeSLighthouse/issues/"+str(bes_id))
+    raw_data = urlopen("https://api.github.com/repos/"+namespace+"/Be-Secure/issues/"+str(bes_id))
 
     data = json.loads(raw_data.read())
 
@@ -178,7 +178,7 @@ if __name__ == "__main__":
         #     write_cve_data(bes_id, f)
         
         if i == "issue_url":
-            f.write('"issue_url": ' + '"https://github.com/'+namespace+'/BeSLighthouse/issues/' + str(bes_id) +'",\n')
+            f.write('"issue_url": ' + '"https://github.com/'+namespace+'/Be-Secure/issues/' + str(bes_id) +'",\n')
         elif i == "bes_technology_stack":
             write_tech_stack(bes_id)
         elif i == "project_repos":
