@@ -32,12 +32,12 @@ if __name__ == "__main__":
     id = sys.argv[1]
     name = sys.argv[2]
     tag_hash = sys.argv[3]
-    dir = os.environ['BESLIGHTHOUSE_DIR']
+    osspoi_dir = os.environ['BES_OSSPOI_DIR']
 
     # id = 343
     # name = "gramine"
     # tag_hash = "141af4d7b97091331b80bf3b63871fcba47414db"
-    f = open(dir +"/bes_theme/assets/data/version_details/" + str(id) + "-" + name + "-Versiondetails.json", "r+")
+    f = open(osspoi_dir +"/version_details/" + str(id) + "-" + name + "-Versiondetails.json", "r+")
     data = json.load(f)
     write_release_date(name, tag_hash, data)
 

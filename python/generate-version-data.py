@@ -36,8 +36,8 @@ if __name__ == "__main__":
     acc_root_dir = os.environ['ACC_ROOT_DIR']
     id = sys.argv[1]
     name = sys.argv[2]
-    dir = os.environ['BESLIGHTHOUSE_DIR']
-    f = open(dir+"/bes_theme/assets/data/version_details/"+str(id) + "-" + name + "-" "Versiondetails.json", "w")
+    dir = os.environ['BES_OSSPOI_DIR']
+    f = open(dir+"/version_details/"+str(id) + "-" + name + "-" "Versiondetails.json", "w")
     # f.write("[\n")
     # f.write("]\n")
     version_data = [{

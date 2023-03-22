@@ -10,7 +10,7 @@ def update_criticality(id, name, project_version):
     
     criticality_score = criticality_data["criticality_score"]
     
-    version_file = open(dashboard_dir+"/bes_theme/assets/data/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r+")
+    version_file = open(osspoi_dir+"/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r+")
     version_data = json.load(version_file)
     
     version_data[0]["criticality_score"] = criticality_score
@@ -27,7 +27,7 @@ def write_criticality_score_data(id, name):
     criticality_file = open(acc_root_dir+"/criticality_score.json", "r")    
     criticality_data = json.load(criticality_file)
     
-    version_file = open(dashboard_dir+"/bes_theme/assets/data/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r")
+    version_file = open(osspoi_dir+"/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r")
     version_data = json.load(version_file)
     
     project_version = version_data[0]["version"]
@@ -47,6 +47,6 @@ if __name__ == "__main__":
     id = sys.argv[1]
     name = sys.argv[2]
     acc_root_dir = os.environ['ACC_ROOT_DIR']
-    dashboard_dir = os.environ['BESLIGHTHOUSE_DIR']
+    osspoi_dir = os.environ['BES_OSSPOI_DIR']
     datastore_dir = os.environ['DATASTORE_DIR']
     write_criticality_score_data(id, name)

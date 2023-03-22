@@ -10,7 +10,7 @@ def update_scorecard(id, name, project_version):
     
     score = scorecard_data["score"]
     
-    version_file = open(dashboard_dir+"/bes_theme/assets/data/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r+")
+    version_file = open(osspoi_dir+"/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r+")
     version_data = json.load(version_file)
     
     version_data[0]["scorecard"] = score
@@ -30,7 +30,7 @@ def write_scorecard_data(id, name):
         sys.exit(str(e))
     scorecard_data = json.loads(raw_data.read())
     
-    version_file = open(dashboard_dir+"/bes_theme/assets/data/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r")
+    version_file = open(osspoi_dir+"/version_details/"+str(id)+"-"+name+"-Versiondetails.json", "r")
     version_data = json.load(version_file)
     
     project_version = version_data[0]["version"]
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     namespace = os.environ['GITHUB_ORG']
     id = sys.argv[1]
     name = sys.argv[2]
-    dashboard_dir = os.environ['BESLIGHTHOUSE_DIR']
+    osspoi_dir = os.environ['BES_OSSPOI_DIR']
     datastore_dir = os.environ['DATASTORE_DIR']
     
     
