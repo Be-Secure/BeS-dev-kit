@@ -57,7 +57,6 @@ function __acc_check_dir_exist
     local flag=0
     for dir in "${dirs[@]}"
     do
-    echo $dir
         if [[ ! -d $dir ]]; then
 
             flag=1
