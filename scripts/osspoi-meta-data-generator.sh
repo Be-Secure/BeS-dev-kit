@@ -55,7 +55,7 @@ function __acc_check_dir_exist
 {
     local dirs=($BES_OSSPOI_DIR $ACC_ROOT_DIR $DATASTORE_DIR)
     local flag=0
-    for dir in $dirs
+    for dir in ${dirs[@]}
     do
         if [[ ! -d $dir ]]; then
 
