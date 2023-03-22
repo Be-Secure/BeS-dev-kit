@@ -51,6 +51,27 @@ function __acc_set_conf
 	done < $HOME/besecure-developer-toolkit/acc-config.cfg
 }
 
+function __acc_check_dir_exist
+{
+    local dirs=($BES_OSSPOI_DIR $ACC_ROOT_DIR $DATASTORE_DIR)
+    local flag=0
+    for dir in $dirs
+    do
+        if [[ ! -d $dir ]]; then
+
+            flag=1
+            echo "Could not find $dir in the path"
+        fi
+    done
+
+    if [[ $flag == 1 ]]; then
+        return 1
+    else
+        return 0
+    fi
+
+}
+
 function __acc_get_scorecard
 {
     local id=$1
@@ -83,6 +104,8 @@ You can also update the same in $ACC_ROOT_DIR/acc-config.cfg file.
 
 }
 
+
+
 function __acc_cleanup
 {
 
@@ -95,11 +118,13 @@ function __acc_cleanup
 function __acc_run
 {
     __acc_set_conf ||  return 1
+    __acc_check_dir_exist || return 1
     read -p "Enter TAVOSS-TR id:" id
     read -p "Enter project name:" name
     echo ""
     echo "Generating data for ossp-master..."
-    echo ""
+    echo ""    
+
     __acc_generate_ossp_data $id $name 
 
     echo ""
@@ -108,7 +133,7 @@ function __acc_run
 
     __acc_get_version_hash $id $name || return 1
     echo ""
-    echo "Version details are placed under $BESLIGHTHOUSE_DIR/bes_theme/assets/data/version_details/$id-$name-Versiondetails.json"
+    echo "Version details are placed under $BES_OSSPOI_DIR/version_details/$id-$name-Versiondetails.json"
     echo ""
     local version=$(cat $ACC_ROOT_DIR/tmp_file)
     echo "Trying to fetching scorecard results..."
