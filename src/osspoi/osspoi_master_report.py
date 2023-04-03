@@ -13,12 +13,12 @@ class OsspoiMaster():
         except Exception as e:
             raise f"Fails to fetch the json report for issue error: {e}"
         lableToFind = {"L&F": True, "A": True, "DA": True, "S": True, "DO": True}
-        try:
-            for label in loadJson["labels"]:
+        for label in loadJson["labels"]:
+            try:
                 if (lableToFind[label["name"]] == True):
                     return label["name"]
-        except Exception as e:
-            raise f"Fails to get the labels error: {e}"
+            except Exception as e:
+                pass
 
     def languages(self, name):
         try:
@@ -38,19 +38,21 @@ class OsspoiMaster():
             raise f"Fails to fetch the tags for issue error: {e}"
         
     def appendToFile(self, data, besecureOsspoi, beSecureID):
-        print(f"{besecureOsspoi}/OSSP-Master.json")
         try:
             found = True
             systemPath = os.path.join(besecureOsspoi, "OSSP-Master.json")
-            fileRead = open(systemPath, "r+")
-            print(fileRead)
-            # for project in fileRead["items"]:
-            #     if project["id"] == beSecureID:
-            #         project = data
-            #         found = False
-            #         break
-            # if found:
-            #     fileRead["items"].append(data)
+            fileR = open(systemPath, "r+")
+            fileRead = json.load(fileR)
+            for project in fileRead["items"]:
+                if project["id"] == beSecureID:
+                    project = data
+                    found = False
+                    break
+            if found:
+                fileRead["items"].append(data)
+            fileWrite = open(systemPath, "w")
+            fileWrite.write(fileRead)
+            fileWrite.close()
         except Exception as e:
             raise f"Fails to read content error: {e}"
 
@@ -106,7 +108,6 @@ class OsspoiMaster():
             "tags": self.tags(id)
 
         }
-        print("jklfdjkldfjkldfjkdfgjkdfgjdfg")
         self.appendToFile(data, besecureOsspoi, id)
         return data
         
