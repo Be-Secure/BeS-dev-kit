@@ -50,8 +50,8 @@ class OsspoiMaster():
                     break
             if found:
                 fileRead["items"].append(data)
-            fileWrite = open(systemPath, "w")
-            fileWrite.write(fileRead)
+            fileWrite = open(systemPath, "w+")
+            fileWrite.write(json.dumps(fileRead))
             fileWrite.close()
         except Exception as e:
             raise f"Fails to read content error: {e}"
