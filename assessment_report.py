@@ -16,8 +16,7 @@ def generate_report():
         besecureAssessment = os.environ["BESECURE_ASSESSMENT_DATASTORE_PATH"]
         ghToken = os.environ["GITHUB_AUTH_TOKEN"]
     except Exception as e:
-        raise Exception(f"Please set environment variable for {e}, eg: \n for windows: set {e}=<your input> \n for Linux, mac export {e}=<your input>")
-    
+        raise Exception(f'Please set environment variable for {e}, eg: \n for windows: set {e}=<your input> \n for Linux, mac export {e}=<your input>')
     id = input("Provide id of project: ")
     name = input("Provide name of project: ")
     
@@ -25,7 +24,7 @@ def generate_report():
 
         report = generateReport(name, id)
         report.osspoiMasterReport(besecureOsspoi)
-        report.osspoiVersionReport()
-        # report.codeQlReport(ghToken)
+        report.osspoiVersionReport(besecureOsspoi)
+        report.codeQlReport(ghToken, besecureAssessment)
     except Exception as e:
         click.echo(f"Fails to generate report for besecure-osspoi-datastore error: {e}")

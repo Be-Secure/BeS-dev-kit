@@ -1,12 +1,14 @@
 import subprocess
+import os
+from ..osspoi.version_detail_report import osspoiVersionDetails
+import json
 
 class CodeQl():
 
     def __init__(self) -> None:
         pass
 
-# curl -L   -H "Accept: application/vnd.github+json"   -H "Authorization: Bearer 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"  -H "X-GitHub-Api-Version: 2022-11-28"   https://api.github.com/repos/Be-Secure/oneTBB/code-scanning/alerts
-    def codeQl_report(self, projectName, githubtoken):
+    def codeQl_report(self, projectName, bes_id, githubtoken, besecureAssessment):
 
         result = subprocess.run([
             'curl',
@@ -20,10 +22,13 @@ class CodeQl():
             f'https://api.github.com/repos/Be-Secure/{projectName}/code-scanning/alerts'
         ], stdout=subprocess.PIPE)
         if (result.stdout):
-            pass
+            version = osspoiVersionDetails.getVersion(bes_id)
+            codeQLPath = os.path.join(besecureAssessment, projectName, version, "sast", f"{projectName}-{version}-codeql-report.json")
+            fileWrite = open(codeQLPath, "w+", encoding='utf-8')
+            json.dump({}, fileWrite, indent=2)
+            fileWrite.close()
         if result.stderr:
-            pass
-        # print(result.stdout)
+            return f"Fail to get the codeQl report {result.stderr}"
 
         
 

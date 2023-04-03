@@ -10,11 +10,11 @@ class GenerateReport:
     def osspoiMasterReport(self, besecureOsspoi):
         return osspoiMaster.createJsonForOsspoiMaster(self.name, self.id, besecureOsspoi)
 
-    def osspoiVersionReport(self):
-        return osspoiVersionDetails.osspoiVersionDetailReport(self.id)
+    def osspoiVersionReport(self, besecureOsspoi):
+        return osspoiVersionDetails.osspoiVersionDetailReport(self.id, self.name, besecureOsspoi)
     
-    def codeQlReport(self, ghtoken):
-        return codeQlReport.codeQl_report(self.name, ghtoken)
+    def codeQlReport(self, ghtoken, besecureAssessment):
+        return codeQlReport.codeQl_report(self.name, self.id, ghtoken, besecureAssessment)
 
     
 generateReport = GenerateReport
