@@ -1,28 +1,14 @@
-# besecure-developer-toolkit
+# Be-Secure Developer Toolkit (bes-dev-kit)
 
-The toolkit helps you to quickly generate meta data for BeSLighthouse visualisation. 
+bes-dev-kit is a cli tool for generating metadata and assessment report for [BeSLighthouse](https://github.com/Be-Secure/BeSLighthouse).
 
-It can generate the following data - 
-- ossp-master
-- version details
-- scorecard
-- criticality score
+`Note: The code is still in testing phase`
 
-## Pre-requisites
+# Testing
 
-1. Python 3.x
-2. GitHub personal access token (classic).
-3. Set all the variables under [config](acc-config.cfg) file.
-
-## Keep in mind
-
-1. Make sure the format of the version is correct under [Be-Secure/issues](https://github.com/Be-Secure/Be-Secure/issues).
-2. Name of the project is case-sensitive. Please provide the name of the project exactly as is given in their repository.
-   
-    ` Note:- Make sure you give the complete path to the directories`
-
-## Usage
-1. Open terminal
-2. Using the below command, run [osspoi-meta-data-generator.sh](scripts/osspoi-meta-data-generator.sh) file.
-    
-    `$ ./osspoi-meta-data-generator.sh`
+1. Install [poetry](https://python-poetry.org/). Use the [link](https://python-poetry.org/docs/) to install Poetry.
+2. Clone the repo.
+3. Move into the cloned directory.
+4. Create a new virtual env using Poetry - `$ poetry shell`
+5. Run the command to install the tool- `$ poetry install`
+6. Check installation - `$ bes-dev-kit --help`

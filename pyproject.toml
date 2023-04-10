@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "besecure-developer-toolkit"
+version = "0.0.1"
+description = ""
+authors = ["asa1997 <arunsureshampadath@gmail.com>"]
+readme = "README.md"
+packages = [{include = "besecure_developer_toolkit"}]
+
+[tool.poetry.scripts]
+bes-dev-kit = "besecure_developer_toolkit.__main__:cli.app"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["all"], version = "^0.7.0"}
+pytest = "^7.3.0"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
