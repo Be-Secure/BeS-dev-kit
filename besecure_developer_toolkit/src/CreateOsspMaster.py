@@ -1,4 +1,4 @@
-import sys, os, json
+import sys, os, json, subprocess
 from urllib.request import urlopen
 from rich import print
 
@@ -92,7 +92,6 @@ class OSSPMaster():
     
     def write_to_ossp_master(self, f, ossp_master_json, data, overwrite: bool):
             if overwrite:
-                print("Overwrite")
                 for i in range(len(ossp_master_json["items"])):
                     if ossp_master_json["items"][i]["id"] == self.id:
                         ossp_master_json["items"][i] = data
@@ -109,6 +108,8 @@ class OSSPMaster():
         self.check_issue_exists(self.id)
         self.check_repo_exists(self.name)
         osspoi_dir = os.environ['OSSPOI_DIR']
+        namespace = os.environ['GITHUB_ORG']
+        token = os.environ['GITHUB_AUTH_TOKEN']
         write_flag = True
         f = open(osspoi_dir+"/OSSP-Master.json", "r+")
         ossp_master_json = json.load(f)
@@ -121,6 +122,8 @@ class OSSPMaster():
                 else:
                     write_flag = True
         if write_flag:
+            # proc = subprocess.Popen([f'curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer <YOUR-TOKEN>"-H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com//{namespace}/{self.name}'], stdout=subprocess.PIPE, shell=True)
+            # (out, err) = proc.communicate()
             url_data = urlopen('https://api.github.com/repos/Be-Secure/'+self.name)
             project_data = json.loads(url_data.read())
             ossp_data = json.loads('{}')
@@ -140,11 +143,8 @@ class OSSPMaster():
                     ossp_data[i] = self.write_languages(self.name)
                 else:
                     ossp_data[i] = project_data[i]
-            # ossp_json_data = json.dumps(ossp_data, indent=4)
             self.write_to_ossp_master(f, ossp_master_json, ossp_data, overwrite)
-            f.close()
-        # return ossp_json_data
-        
+            f.close()        
         
         
     

@@ -44,7 +44,6 @@ def ossp(overwrite: bool = typer.Option(False, help="Overwrite the existing entr
     ossp_data.GenerateOsspMaster(overwrite)
     version_data = Version(id, name)
     version_data.generate_version_data(overwrite)
-    print("Successfully generated metadata for "+str(id)+"-"+name)
 
 @generate_app.command("report")
 def report(reports: List[str], update_version_file: bool = typer.Option(True, help="Update version file with scorecard/criticality score")):

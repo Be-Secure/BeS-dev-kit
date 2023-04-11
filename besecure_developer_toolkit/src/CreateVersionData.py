@@ -22,8 +22,9 @@ class Version():
                 break
         
         return str(i)
-
+    
     def get_release_date(self, version, name):
+        self.cleanup()        
         os.system('git clone -q https://github.com/Be-Secure/' + name +' /tmp/'+name)
         os.chdir('/tmp/'+name)
         proc = subprocess.Popen(['git log --tags --simplify-by-decoration --pretty="format:%ci %d" | grep -w "'+version +'"'], stdout=subprocess.PIPE, shell=True)
@@ -36,7 +37,9 @@ class Version():
         return final_date
     
     def cleanup(self):
-        shutil.rmtree('/tmp/'+self.name)
+        if os.path.exists(f'/tmp/{self.name}') == True:
+            shutil.rmtree('/tmp/'+self.name)
+  
     
     def overwrite_version_data(self, f, version_data_new, original_data, version_tag):
         for i in range(len(original_data)):
