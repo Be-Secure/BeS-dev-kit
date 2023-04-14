@@ -130,7 +130,7 @@ class OSSPMaster():
         if not overwrite:                 
             for i in range(len(ossp_master_json["items"])):
                 if ossp_master_json["items"][i]["id"] == self.id:
-                    print("[bold red]Alert! [green]Entry for "+str(self.id)+"-"+self.name+" already present")
+                    print("[bold red]Alert! [green]Entry for "+str(self.id)+"-"+self.name+" already present under OSSP-Master.json")
                     write_flag = False
                     break
                 else:

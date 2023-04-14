@@ -70,7 +70,7 @@ class Version():
             for i in range(len(original_data)):
                 if original_data[i]["version"] == version_data_new["version"] and not overwrite:
                     write_flag = False
-                    print("[bold red]Alert! [green]Version " +version_tag+ " exists")
+                    print(f"[bold red]Alert! [green]Version {version_tag} exists under {self.id}-{self.name}-Versiondetails.json ")
                     break
                 else:
                     write_flag = True
