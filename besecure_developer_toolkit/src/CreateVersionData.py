@@ -79,8 +79,10 @@ class Version():
                 f.seek(0)
                 f.write(json.dumps(original_data, indent=4))
                 f.truncate
-            else:
+            elif write_flag == True and overwrite:
                 self.overwrite_version_data(f, version_data_new, original_data, version_tag)
+            else:
+                pass
         else:
             f = open(path, "w")
             f.write(json.dumps(version_data_new, indent=4))
