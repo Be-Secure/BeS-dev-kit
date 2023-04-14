@@ -15,8 +15,21 @@ class OSSPMaster():
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print(exc_type, fname, exc_tb.tb_lineno)
-            print("Could not find issue with id : "+id)
+            print("Could not find issue with id : "+str(id))
             sys.exit()
+    
+    def check_issue_related_to_project(self):
+            
+        json_data = json.loads(urlopen(f'https://api.github.com/repos/Be-Secure/Be-Secure/issues/{self.id}').read())
+        issue_title = json_data["title"]
+        project_name = str(str(issue_title).split(":")[1]).replace(" ","")
+        if project_name != self.name:
+            print(f"[bold red]Alert! [yellow]Mismatch issue_id-project : [green] Issue id {self.id} does not match the project {self.name}")
+            sys.exit()
+        else:
+            pass
+
+        
     
     def check_repo_exists(self,name) -> None:
         try:
@@ -107,6 +120,7 @@ class OSSPMaster():
     def GenerateOsspMaster(self, overwrite: bool):
         self.check_issue_exists(self.id)
         self.check_repo_exists(self.name)
+        self.check_issue_related_to_project()
         osspoi_dir = os.environ['OSSPOI_DIR']
         namespace = os.environ['GITHUB_ORG']
         token = os.environ['GITHUB_AUTH_TOKEN']
