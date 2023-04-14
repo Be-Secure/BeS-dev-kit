@@ -12,7 +12,7 @@ bes-dev-kit is a cli tool for generating metadata and assessment report for [BeS
 
 # Setting env variables
 
-`Note: Should be done before testing`
+`Note: Should be done before testing/running`
 
 1. Creating a json file in your user home dir under the name `bes-dev-kit.json`.
 2. Copy the below contents and paste it inside the file.
