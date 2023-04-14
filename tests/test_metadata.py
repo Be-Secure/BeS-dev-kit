@@ -60,7 +60,23 @@ def test_without_overwrite():
     name = "fastjson"
     version = "1.2.24"
     osspoi = os.environ['OSSPOI_DIR']
+    f = open(f"{osspoi}/version_details/{id}-{name}-Versiondetails.json")
+    original_version_data = json.load(f)
+    for i in range(len(original_version_data)):
+        if original_version_data[i]["version"] == version:
+            test_data_original = original_version_data[i]
+            break
+    f.close()
     result = runner.invoke(app, ["generate", "metadata"], input=id+"\n"+name+"\n")
+    f = open(f"{osspoi}/version_details/{id}-{name}-Versiondetails.json")
+    original_version_data = json.load(f)
+    for i in range(len(original_version_data)):
+        if original_version_data[i]["version"] == version:
+            test_data_new = original_version_data[i]
+            break
+    f.close()
     assert result.exit_code == 0
+    assert sorted(test_data_original) == sorted(test_data_new)
     assert f'Alert! Entry for {id}-{name} already present' in result.stdout
     assert f'Alert! Version {version} exists' in result.stdout
+
