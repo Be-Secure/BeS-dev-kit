@@ -19,8 +19,8 @@ bes-dev-kit is a cli tool for generating metadata and assessment report for [BeS
    
         {
         "GITHUB_ORG": "Be-Secure",
-        "OSSPOI_DIR": "<user-home>/besecure-osspoi-datastore",
-        "ASSESSMENT_DIR": "<user-home>/besecure-assessment-datastore",
+        "OSSPOI_DIR": "<complete_path_to>/besecure-osspoi-datastore",
+        "ASSESSMENT_DIR": "<complete_path_to>/besecure-assessment-datastore",
         "GITHUB_AUTH_TOKEN": "<token>"
         }
 3. Update `OSSPOI_DIR` and `ASSESSMENT_DIR` with complete path to your `besecure-assessment-datastore` and `besecure-osspoi-datastore`  dirs.
