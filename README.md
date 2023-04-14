@@ -2,7 +2,6 @@
 
 bes-dev-kit is a cli tool for generating metadata and assessment report for [BeSLighthouse](https://github.com/Be-Secure/BeSLighthouse).
 
-`Note: The code is still in testing phase`
 
 # Pre-requisites
 
@@ -26,6 +25,11 @@ bes-dev-kit is a cli tool for generating metadata and assessment report for [BeS
         }
 3. Update `OSSPOI_DIR` and `ASSESSMENT_DIR` with complete path to your `besecure-assessment-datastore` and `besecure-osspoi-datastore`  dirs.
 4. Add your github personal access token
+
+# Installation
+
+`$ python3 -m pip install besecure-developer-toolkit`
+
 
 # Testing Locally
 
