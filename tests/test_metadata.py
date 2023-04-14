@@ -80,3 +80,19 @@ def test_without_overwrite():
     assert f'Alert! Entry for {id}-{name} already present' in result.stdout
     assert f'Alert! Version {version} exists' in result.stdout
 
+def test_issue_project_mismatch():
+    id = 137
+    name = "fastjson"
+    osspoi = os.environ['OSSPOI_DIR']
+    result = runner.invoke(app, ["generate", "metadata"], input=str(id)+"\n"+name+"\n")
+    assert result.exit_code == 0
+    f = open(f'{osspoi}/OSSP-Master.json')
+    ossp_master_json = json.load(f)
+    for i in range(len(ossp_master_json["items"])): 
+        if ossp_master_json["items"][i]["id"] == id and ossp_master_json["items"][i]["name"] == name:
+            new_id = ossp_master_json["items"][i]["id"]
+            new_name = ossp_master_json["items"][i]["name"]
+            print(new_id, new_name)
+            raise AssertionError
+        else:
+            pass
