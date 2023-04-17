@@ -1,1 +1,6 @@
-ossp_data.json
+__pycache__/
+.vscode/
+.pytest_cache/
+dist/
+besecure_developer_toolkit/__pycache__/
+besecure_developer_toolkit/src/__pycache__/
