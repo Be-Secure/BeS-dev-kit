@@ -60,8 +60,12 @@ class Version():
             "cve_details": "Not Available"
         }
         version_tag = self.get_version_tag(self.id)
-        version_data_new["version"] = version_tag
-        date = self.get_release_date(version_tag, self.name)
+            
+        version_data_new["version"] = version_tag         
+        if version_tag != "alpha":
+            date = self.get_release_date(version_tag, self.name)
+        else:
+            pass
         version_data_new["release_date"] = date
         path = osspoi_dir+"/version_details/"+str(self.id) + "-" + self.name + "-" "Versiondetails.json"
         if os.path.exists(path):
