@@ -9,6 +9,7 @@ from besecure_developer_toolkit import __app_name__, __version__
 from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
 from besecure_developer_toolkit.src.CreateVersionData import Version
 from besecure_developer_toolkit.src.GenerateReport import Report
+from besecure_developer_toolkit.src.VersionDetailsNameValidation import vdnc_validate
 
 def set_env_vars():
     user_home = os.path.expanduser('~')
@@ -75,6 +76,19 @@ def report(reports: List[str], update_version_file: bool = typer.Option(True, he
                 codeql_obj = Report(id, name, version, i)
                 codeql_obj.main()
     
+@generate_app.command("vdnc-validate")
+def version_data_naming_converntion_validation():
+    """ Update OSSP-master.json file and add/update version file to osspoi datastore """
+    try:
+        id = int(input("Enter OSSP id:"))
+    except ValueError:
+        sys.exit("Input should be of type int")
+    name = str(input("Enter OSSP name:"))
+    namespace = str(input("Enter GitHub username:"))
+    branch = str(input("Enter branch:"))
+
+    version_data = vdnc_validate(id, name, namespace, branch)
+    version_data.verify_versiondetails_name()
 
     
 @app.callback()
