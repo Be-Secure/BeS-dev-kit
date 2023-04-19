@@ -32,9 +32,12 @@ class Version():
         date = str(out).split(" ")[0]
         raw_date = date.split("'")[1]
         split_date = raw_date.split("-")
-        format_datetime = datetime.datetime(int(split_date[0]), int(split_date[1]), int(split_date[2]))
-        final_date = str(format_datetime.strftime("%d-%b-%Y"))    
-        return final_date
+        try:
+            format_datetime = datetime.datetime(int(split_date[0]), int(split_date[1]), int(split_date[2]))
+            final_date = str(format_datetime.strftime("%d-%b-%Y"))    
+            return final_date
+        except Exception as e:
+            pass
     
     def cleanup(self):
         if os.path.exists(f'/tmp/{self.name}') == True:
@@ -62,11 +65,12 @@ class Version():
         version_tag = self.get_version_tag(self.id)
             
         version_data_new["version"] = version_tag         
-        if version_tag != "alpha":
-            date = self.get_release_date(version_tag, self.name)
+
+        date = self.get_release_date(version_tag, self.name)
+        if date != None:
+            version_data_new["release_date"] = date
         else:
-            pass
-        version_data_new["release_date"] = date
+            version_data_new["release_date"] = "Not Available"
         path = osspoi_dir+"/version_details/"+str(self.id) + "-" + self.name + "-" "Versiondetails.json"
         if os.path.exists(path):
             f = open(path, "r+") 
@@ -89,7 +93,9 @@ class Version():
                 pass
         else:
             f = open(path, "w")
-            f.write(json.dumps(version_data_new, indent=4))
+            data_to_write =[]
+            data_to_write.insert(0, version_data_new)
+            f.write(json.dumps(data_to_write, indent=4))
         self.cleanup()
         f.close()
         
