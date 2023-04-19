@@ -96,3 +96,20 @@ def test_issue_project_mismatch():
             raise AssertionError
         else:
             pass
+def test_version_alpha():
+    id = "376"
+    name = "SYCLomatic-test"
+    version = "alpha"
+    release_date = "Not Available"
+    osspoi = os.environ['OSSPOI_DIR']
+    result = runner.invoke(app, ["generate", "metadata"], input=str(id)+"\n"+name+"\n")
+    assert result.exit_code == 0
+    f = open(f"{osspoi}/version_details/{id}-{name}-Versiondetails.json")
+    data = json.load(f)
+    for i in range(len(data)):
+        if data[i]["version"] == version:
+            test_data = data[i]
+            break
+    
+    assert test_data["version"] == version
+    assert test_data["release_date"] == release_date
