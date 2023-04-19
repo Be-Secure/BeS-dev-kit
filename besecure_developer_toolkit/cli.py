@@ -23,8 +23,10 @@ set_env_vars()
 app = typer.Typer()
 
 generate_app = typer.Typer()
+validate = typer.Typer()
 
 app.add_typer(generate_app, name="generate")
+app.add_typer(validate, name="validate")
 
 def _version_callback(value: bool) -> None:
     if value:
@@ -76,9 +78,9 @@ def report(reports: List[str], update_version_file: bool = typer.Option(True, he
                 codeql_obj = Report(id, name, version, i)
                 codeql_obj.main()
     
-@generate_app.command("vdnc-validate")
+@validate.command("vdnc")
 def version_data_naming_converntion_validation():
-    """ Update OSSP-master.json file and add/update version file to osspoi datastore """
+    """ Check version details file naming convention """
     try:
         id = int(input("Enter OSSP id:"))
     except ValueError:

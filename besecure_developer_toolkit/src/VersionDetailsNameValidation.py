@@ -1,4 +1,4 @@
-import json, sys, os
+import sys
 from rich import print
 from urllib.request import urlopen
 from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
