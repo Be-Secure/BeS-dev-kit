@@ -2,16 +2,16 @@
 
 bes-dev-kit is a cli tool for generating metadata and assessment report for [BeSLighthouse](https://github.com/Be-Secure/BeSLighthouse).
 
+# Pre-requisites
+
+1. Python 3.x
+2. pip
+3. Github personal access token
+
 # Installation
 
 `$ python3 -m pip install besecure-developer-toolkit`
 
-# Pre-requisites
-
-1. [Poetry](https://python-poetry.org/)
-2. Python 3.x
-3. pip
-4. Github personal access token
 
 # Setting env variables
 
