@@ -19,8 +19,7 @@ class Version():
             if len(i.strip()) == 0:
                 continue
             if len(i.strip()) != 0 and found == "true":             
-                break
-        
+                break       
         return str(i)
     
     def get_release_date(self, version, name):
@@ -36,8 +35,8 @@ class Version():
             format_datetime = datetime.datetime(int(split_date[0]), int(split_date[1]), int(split_date[2]))
             final_date = str(format_datetime.strftime("%d-%b-%Y"))    
             return final_date
-        except Exception as e:
-            pass
+        except Exception:
+            print(f"Could not find release for version {version}, ignoring release date")
     
     def cleanup(self):
         if os.path.exists(f'/tmp/{self.name}') == True:
@@ -62,12 +61,10 @@ class Version():
             "scorecard": "Not Available",
             "cve_details": "Not Available"
         }
-        version_tag = self.get_version_tag(self.id)
-            
+        version_tag = self.get_version_tag(self.id)            
         version_data_new["version"] = version_tag         
-
         date = self.get_release_date(version_tag, self.name)
-        if date != None:
+        if date is not None:
             version_data_new["release_date"] = date
         else:
             version_data_new["release_date"] = "Not Available"
@@ -93,7 +90,7 @@ class Version():
                 pass
         else:
             f = open(path, "w")
-            data_to_write =[]
+            data_to_write = []
             data_to_write.insert(0, version_data_new)
             f.write(json.dumps(data_to_write, indent=4))
         self.cleanup()

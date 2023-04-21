@@ -30,7 +30,6 @@ def test_metadata():
 def test_version_file_not_empty():
     id = "136"
     name = "fastjson"
-    version = "1.2.24"
     osspoi = os.environ['OSSPOI_DIR']
     result = runner.invoke(app, ["generate", "metadata"], input=id+"\n"+name+"\n")
     assert result.exit_code == 0
@@ -96,6 +95,8 @@ def test_issue_project_mismatch():
             raise AssertionError
         else:
             pass
+        
+        
 def test_version_alpha():
     id = "376"
     name = "SYCLomatic-test"
@@ -109,7 +110,6 @@ def test_version_alpha():
     for i in range(len(data)):
         if data[i]["version"] == version:
             test_data = data[i]
-            break
-    
+            break   
     assert test_data["version"] == version
     assert test_data["release_date"] == release_date
