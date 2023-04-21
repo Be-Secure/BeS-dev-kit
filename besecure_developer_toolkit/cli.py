@@ -79,7 +79,7 @@ def report(reports: List[str], update_version_file: bool = typer.Option(True, he
                 codeql_obj.main()
     
 @validate.command("vdnc")
-def version_data_naming_converntion_validation():
+def version_data_naming_convention_validation():
     """ Check version details file naming convention """
     try:
         id = int(input("Enter OSSP id:"))
@@ -92,6 +92,10 @@ def version_data_naming_converntion_validation():
     version_data = vdnc_validate(id, name, namespace, branch)
     version_data.verify_versiondetails_name()
 
+@validate.command("rnc")
+def report_naming_convention_validation():
+    """ Check report file naming convention """
+    pass
     
 @app.callback()
 def main(
