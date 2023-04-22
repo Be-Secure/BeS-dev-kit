@@ -3,7 +3,14 @@ import os, json
 
 from besecure_developer_toolkit.cli import app
 
+from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
+
 runner = CliRunner()
+
+def test_issue_url():
+    issue_id = 136
+    ret = OSSPMaster.check_issue_exists(self,issue_id)
+    assert ret.code != 404
 
 def test_metadata():
     id = "136"
