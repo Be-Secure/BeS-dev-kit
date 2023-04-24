@@ -32,13 +32,13 @@ class VdncValidate():
                     "/besecure-osspoi-datastore/branches/"+self.branch)
         except HTTPError:
             print(f"[bold red]Alert! [green]{self.branch} does not "
-                  "exists under besecure-osspoi-datastore repo")
+                  f"exists under besecure-osspoi-datastore for {self.namespace}")
             sys.exit()
 
     def check_repo_exists(self, flag, namespace) -> None:
         """This is an overriding method of CreateOsspMaster class
-        It checks if besecure-osspoi-datastore repo exists under the given user
-        Here flag is used for differentiate between base & child class method"""
+        It checks if besecure-osspoi-datastore repo exists under the given user,
+        here flag is used for differentiate between base & child class method"""
         try:
             if flag:
                 urlopen("https://api.github.com/repos/" +
