@@ -77,8 +77,8 @@ class Report():
         osspoi_dir = os.environ['OSSPOI_DIR']
         assessment_dir = os.environ['ASSESSMENT_DIR']
         report_file = open(assessment_dir+'/'+self.name+'/'+self.version+'/'+self.report +
-            '/'+self.name + '-' + self.version +
-            '-' + self.report + '-report.json', "r", encoding="utf-8")
+                            '/'+self.name + '-' + self.version +
+                            '-' + self.report + '-report.json', "r", encoding="utf-8")
         version_file = open(osspoi_dir+"/version_details/"+str(self.issue_id) +
                             "-" + self.name + "-" "Versiondetails.json", "r+", encoding="utf-8")
 
