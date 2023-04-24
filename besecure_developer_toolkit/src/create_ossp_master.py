@@ -76,10 +76,10 @@ class OSSPMaster():
             if len(i.strip()) == 0:
                 continue
             if len(i.strip()) != 0 and found == "true":
-                s = str(i.split(" [")[1])
-                s = str(s.split("]")[0])
+                stack = str(i.split(" [")[1])
+                stack = str(stack.split("]")[0])
                 break
-        return s
+        return stack
 
     def write_project_repos_data(self, project_data):
         """
