@@ -27,7 +27,7 @@ def test_vdnc_with_invalid_id():
     namespace = "pramit-d"
     branch = "Koha"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id)+
+    result = runner.invoke(app, ["validate", "vdnc"], input = str(issue_id)+
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -35,7 +35,7 @@ def test_vdnc_with_invalid_id():
     assert result == "Could not find issue with id : 500"
 
 def test_vdnc_with_invalid_version_tag():
-    """check version tag present under besecure issue details & 
+    """check version tag present under besecure issue details &
     the tag written inside the version details file is not same"""
     issue_id = 148
     name = "Koha"

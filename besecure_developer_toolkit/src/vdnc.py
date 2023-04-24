@@ -20,8 +20,8 @@ class VdncValidate():
         try:
             urlopen("https://api.github.com/users/"+self.namespace)
         except HTTPError:
-            print(
-                f"[bold red]Alert! [green]{self.namespace} is not valid username")
+            print(f"[bold red]Alert! [green]"\
+                  f"{self.namespace} is not valid username")
             sys.exit()
 
     def check_branch_exists(self):
@@ -35,18 +35,19 @@ class VdncValidate():
                   "exists under besecure-osspoi-datastore repo")
             sys.exit()
 
-    def check_repo_exists(self, namespace) -> None:
-        """This is an over method of CreateOsspMaster class
-        It checks if besecure-osspoi-datastore repo exists under the given user"""
+    def check_repo_exists(self, flag, namespace) -> None:
+        """This is an overriding method of CreateOsspMaster class
+        It checks if besecure-osspoi-datastore repo exists under the given user
+        Here flag is used for differentiate between base & child class method"""
         try:
-            urlopen("https://api.github.com/repos/" +
+            if flag:
+                urlopen("https://api.github.com/repos/" +
                     namespace+"/besecure-osspoi-datastore")
         except HTTPError:
             print(f"[bold red]Alert! [green]Could not find "
                   f"besecure-osspoi-datastore under {namespace}")
             sys.exit()
 
-    # check the version tag in issue is same as the one inside the version details file
     def check_version_tag_exists(self):
         """It checks if the version tag present in besecure issue is
         same as version tag of version details file uploaded by user"""
@@ -83,7 +84,7 @@ class VdncValidate():
         obj.check_repo_exists(self.name)
         obj.check_issue_related_to_project()
         self.check_username()
-        self.check_repo_exists(self.namespace)
+        self.check_repo_exists(True,self.namespace)
         self.check_branch_exists()
         try:
             urlopen("https://raw.githubusercontent.com/"
