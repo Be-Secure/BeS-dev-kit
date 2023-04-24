@@ -9,7 +9,7 @@ from besecure_developer_toolkit import __app_name__, __version__
 from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
 from besecure_developer_toolkit.src.CreateVersionData import Version
 from besecure_developer_toolkit.src.GenerateReport import Report
-from besecure_developer_toolkit.src.VersionDetailsNameValidation import vdnc_validate
+from besecure_developer_toolkit.src.vdnc import vdnc_validate
 
 def set_env_vars():
     user_home = os.path.expanduser('~')
@@ -78,6 +78,7 @@ def report(reports: List[str], update_version_file: bool = typer.Option(True, he
                 codeql_obj = Report(id, name, version, i)
                 codeql_obj.main()
     
+
 @validate.command("vdnc")
 def version_data_naming_convention_validation():
     """ Check version details file naming convention """
@@ -91,6 +92,7 @@ def version_data_naming_convention_validation():
 
     version_data = vdnc_validate(id, name, namespace, branch)
     version_data.verify_versiondetails_name()
+
 
 @validate.command("rnc")
 def report_naming_convention_validation():

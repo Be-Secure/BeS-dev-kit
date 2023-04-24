@@ -1,7 +1,9 @@
-import sys,json
+import sys
+import json
 from rich import print
 from urllib.request import urlopen
 from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
+
 
 class vdnc_validate():
     def __init__(self, id: int, name: str, namespace: str, branch: str):
@@ -14,7 +16,7 @@ class vdnc_validate():
         try:
             urlopen("https://api.github.com/users/"+self.namespace)
         except:
-            print (f"[bold red]Alert! [green]{self.namespace} is not valid username")
+            print(f"[bold red]Alert! [green]{self.namespace} is not valid username")
             sys.exit()
 
     def check_branch_exists(self):
@@ -24,20 +26,20 @@ class vdnc_validate():
             print(f"[bold red]Alert! [green]{self.branch} does not exists under besecure-osspoi-datastore repo")
             sys.exit()
             
-    def check_repo_exists(self,name, namespace) -> None:
+    def check_repo_exists(self, name, namespace) -> None:
         try:
             urlopen("https://api.github.com/repos/"+namespace+"/besecure-osspoi-datastore")
         except Exception as e:
             print(f"[bold red]Alert! [green]Could not find besecure-osspoi-datastore under {namespace}")
             sys.exit()
 
-    ## check the version tag in issue is same as the one inside the version details file
+    # check the version tag in issue is same as the one inside the version details file
     def check_version_tag_exists(self):
-        # retrive issue version tag 
+        # retrive issue version tag
         json_data = json.loads(urlopen(f'https://api.github.com/repos/Be-Secure/Be-Secure/issues/{self.id}').read())
         issue_version_tag = json_data["body"]
         issue_version_tag = str(issue_version_tag).split("###")[1]
-        issue_version_tag=issue_version_tag.strip().replace('\n', '').replace('\r', '').replace('Version of the project','').strip()
+        issue_version_tag=issue_version_tag.strip().replace('\n', '').replace('\r', '').replace('Version of the project', '').strip()
 
         # retrive versiondetails version tag
         json_data = json.loads(urlopen("https://raw.githubusercontent.com/"+self.namespace+"/besecure-osspoi-datastore/"+self.branch+"/version_details/"+str(self.id)+"-"+self.name+"-Versiondetails.json").read())
@@ -49,7 +51,6 @@ class vdnc_validate():
             return False
         else:
             return True
-        
 
     def verify_versiondetails_name(self):
         obj = OSSPMaster(self.id, self.name)
@@ -57,7 +58,7 @@ class vdnc_validate():
         obj.check_repo_exists(self.name)
         obj.check_issue_related_to_project()
         self.check_username()
-        self.check_repo_exists(self.name,self.namespace)
+        self.check_repo_exists(self.name, self.namespace)
         self.check_branch_exists()
         
         try:
@@ -67,6 +68,3 @@ class vdnc_validate():
                 print(f"{self.id}-{self.name}-Versiondetails.json exists")
         except:
             print(f"[bold red]Alert! [green]{self.id}-{self.name}-Versiondetails.json does not exists")
-        
-        
-
