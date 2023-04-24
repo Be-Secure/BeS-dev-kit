@@ -40,7 +40,8 @@ def _version_callback(value: bool) -> None:
 def ossp(overwrite: bool =
          typer.Option(False,
                       help=
-                      "Overwrite the existing entries inside OSSP-master.json and version file")):
+                      "Overwrite the existing entries \
+                        inside OSSP-master.json and version file")):
     """ Update OSSP-master.json file and add/update version file to osspoi datastore """
     try:
         issue_id = int(input("Enter OSSP id:"))

@@ -31,7 +31,8 @@ class Report():
 
         elif self.report == "codeql":
             token = os.environ['GITHUB_AUTH_TOKEN']
-            cmd = 'curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ' + \
+            cmd = 'curl -s -L -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ' + \
                 token+'" -H "X-GitHub-Api-Version: 2022-11-28" '+url
             os.system(cmd+' >> /tmp/'+self.report+'.json')
             codeql_f = open('/tmp/'+self.report+'.json', 'r', encoding="utf-8")
@@ -63,7 +64,7 @@ class Report():
             os.makedirs(path, exist_ok=True)
         except FileExistsError as err:
             print(f"error to create file Error: {err}")
-            
+
         f = open(path + '/' + self.name + '-' + self.version +
                  '-' + self.report + '-report.json', "w", encoding="utf-8")
 
@@ -76,7 +77,8 @@ class Report():
         osspoi_dir = os.environ['OSSPOI_DIR']
         assessment_dir = os.environ['ASSESSMENT_DIR']
         report_file = open(assessment_dir+'/'+self.name+'/'+self.version+'/'+self.report +
-                           '/'+self.name + '-' + self.version + '-' + self.report + '-report.json', "r", encoding="utf-8")
+                            '/'+self.name + '-' + self.version +
+                            '-' + self.report + '-report.json', "r", encoding="utf-8")
         version_file = open(osspoi_dir+"/version_details/"+str(self.issue_id) +
                             "-" + self.name + "-" "Versiondetails.json", "r+", encoding="utf-8")
 
@@ -88,7 +90,7 @@ class Report():
 
         version_data = json.load(version_file)
         for i, version in range(len(version_data)):
-            # fix me 
+            # fix me
             if version == self.version:
                 version_data[i][self.report] = score
         version_file.seek(0)
@@ -114,7 +116,8 @@ class Report():
         elif self.report == "criticality_score":
             if "GITHUB_AUTH_TOKEN" not in os.environ:
                 print(
-                    "[bold red] Alert! [green] Please use the below command to set your personal access token and try again.")
+                    "[bold red] Alert! [green] Please use the below \
+                          command to set your personal access token and try again.")
                 print("[yellow]export GITHUB_AUTH_TOKEN=token")
                 sys.exit()
             url = 'github.com/Be-Secure/'+self.name
@@ -122,7 +125,8 @@ class Report():
         elif self.report == "codeql":
             if "GITHUB_AUTH_TOKEN" not in os.environ:
                 print(
-                    "[bold red] Alert! [green] Please use the below command to set your personal access token and try again.")
+                    "[bold red] Alert! [green] Please use the \
+                        below command to set your personal access token and try again.")
                 print("[yellow]export GITHUB_AUTH_TOKEN=token")
                 sys.exit()
             url = 'https://api.github.com/repos/Be-Secure/' + \

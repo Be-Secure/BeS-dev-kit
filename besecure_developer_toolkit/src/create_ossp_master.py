@@ -47,7 +47,7 @@ class OSSPMaster():
 
     def check_repo_exists(self, name) -> None:
         """
-            Check if repo exists in Be-Secure or not 
+            Check if repo exists in Be-Secure or not
         """
         try:
             urlopen('https://api.github.com/repos/Be-Secure/'+name)
@@ -179,14 +179,15 @@ class OSSPMaster():
                 f'https://api.github.com/repos/Be-Secure/{self.name}')
             project_data = json.loads(url_data.read())
             ossp_data = json.loads('{}')
-            repo_keys = ["id", "bes_tracking_id", "issue_url", "name",
-                          "full_name", "description", "bes_technology_stack",
-                          "watchers_count", "forks_count", "stargazers_count",
-                          "size", "open_issues", "created_at", "updated_at",
-                          "pushed_at", "git_url", "clone_url", "html_url",
-                          "homepage", "owner", "project_repos", "license",
-                          "language", "tags"
-                        ]
+            repo_keys = [
+                "id", "bes_tracking_id", "issue_url", "name",
+                "full_name", "description", "bes_technology_stack",
+                "watchers_count", "forks_count", "stargazers_count",
+                "size", "open_issues", "created_at", "updated_at",
+                "pushed_at", "git_url", "clone_url", "html_url",
+                "homepage", "owner", "project_repos", "license",
+                "language", "tags"
+            ]
             for i in repo_keys:
                 if i == "id" or i == "bes_tracking_id":
                     ossp_data[i] = self.issue_id
