@@ -44,11 +44,13 @@ class Version():
     def overwrite_version_data(self, f, version_data_new, original_data, version_tag):
         for i in range(len(original_data)):
             if original_data[i]["version"] == version_tag:
+                if original_data[i]["cve_details"] != "Not Available":
+                    version_data_new["cve_details"] = original_data[i]["cve_details"]
                 original_data[i] = version_data_new
                 break
         f.seek(0)
         f.write(json.dumps(original_data, indent=4))
-        f.truncate
+        f.truncate()
         
     def generate_version_data(self, overwrite: bool):
         osspoi_dir = os.environ['OSSPOI_DIR']
