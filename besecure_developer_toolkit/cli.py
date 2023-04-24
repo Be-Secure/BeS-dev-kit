@@ -1,6 +1,8 @@
 """This module provides the Be-Secure Developer Toolkit CLI."""
 # src/cli.py
-import sys, os, json
+import sys
+import os
+import json
 from typing import Optional
 from typing import List
 from rich import print
@@ -9,7 +11,8 @@ from besecure_developer_toolkit import __app_name__, __version__
 from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
 from besecure_developer_toolkit.src.CreateVersionData import Version
 from besecure_developer_toolkit.src.GenerateReport import Report
-from besecure_developer_toolkit.src.vdnc import vdnc_validate
+from besecure_developer_toolkit.src.vdnc import VdncValidate
+
 
 def set_env_vars():
     user_home = os.path.expanduser('~')
@@ -17,6 +20,7 @@ def set_env_vars():
         vars = json.load(f)
     for key, value in vars.items():
         os.environ[key] = str(value)
+
 
 set_env_vars()
 
@@ -28,11 +32,11 @@ validate = typer.Typer()
 app.add_typer(generate_app, name="generate")
 app.add_typer(validate, name="validate")
 
+
 def _version_callback(value: bool) -> None:
     if value:
         typer.echo(f"{__app_name__} v{__version__}")
         raise typer.Exit()
-
 
 
 @generate_app.command("metadata")
@@ -48,6 +52,7 @@ def ossp(overwrite: bool = typer.Option(False, help="Overwrite the existing entr
     version_data = Version(id, name)
     version_data.generate_version_data(overwrite)
 
+
 @generate_app.command("report")
 def report(reports: List[str], update_version_file: bool = typer.Option(True, help="Update version file with scorecard/criticality score")):
     """ Following reports can be generated - scorecard, criticality_score, codeql"""
@@ -60,45 +65,46 @@ def report(reports: List[str], update_version_file: bool = typer.Option(True, he
         except ValueError:
             print("[bold red]Alert! [green]Expected type int")
             raise typer.Exit()
-            
+
         name = str(input("Enter OSSP name:"))
-        version = str(input("Enter version of "+ name +":"))
+        version = str(input("Enter version of " + name + ":"))
         for i in reports:
             if i == "scorecard":
-               scorecard_obj = Report(id, name, version, i)
-               scorecard_obj.main()
-               if update_version_file:
-                   scorecard_obj.update_version_data()
+                scorecard_obj = Report(id, name, version, i)
+                scorecard_obj.main()
+                if update_version_file:
+                    scorecard_obj.update_version_data()
             elif i == "criticality_score":
                 criticality_obj = Report(id, name, version, i)
                 criticality_obj.main()
-                if update_version_file:   
+                if update_version_file:
                     criticality_obj.update_version_data()
             elif i == "codeql":
                 codeql_obj = Report(id, name, version, i)
                 codeql_obj.main()
-    
+
 
 @validate.command("vdnc")
 def version_data_naming_convention_validation():
     """ Check version details file naming convention """
     try:
-        id = int(input("Enter OSSP id:"))
+        issue_id = int(input("Enter OSSP id:"))
     except ValueError:
         sys.exit("Input should be of type int")
     name = str(input("Enter OSSP name:"))
     namespace = str(input("Enter GitHub username:"))
     branch = str(input("Enter branch:"))
 
-    version_data = vdnc_validate(id, name, namespace, branch)
+    version_data = VdncValidate(issue_id, name, namespace, branch)
     version_data.verify_versiondetails_name()
 
 
 @validate.command("rnc")
 def report_naming_convention_validation():
     """ Check report file naming convention """
-    pass
-    
+    print("Under Development")
+
+
 @app.callback()
 def main(
     version: Optional[bool] = typer.Option(
@@ -109,6 +115,6 @@ def main(
         callback=_version_callback,
         is_eager=True,
     )
-): 
+):
 
     return
