@@ -1,4 +1,4 @@
-import sys, os, json, subprocess
+import sys, os, json, subprocess, requests
 from urllib.request import urlopen
 from rich import print
 
@@ -8,43 +8,60 @@ class OSSPMaster():
         self.id = id
         self.name = name
     
-    def check_issue_exists(self,id) -> None:
+    @staticmethod
+    def check_issue_exists(id: int):
+        """Function to check if the issue exists
+
+        Args:
+            id (int): Issue id
+
+        Returns:
+            bool: True if issue exists and False if otherwise
+        """
+        url = f"https://github.com/Be-Secure/Be-Secure/issues/{id}"
         try:
-            urlopen('https://github.com/Be-Secure/Be-Secure/issues/'+str(id))
-        except Exception as e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            print("Could not find issue with id : "+str(id))
-            sys.exit()
-    
+            response = requests.head(url)
+            if response.status_code == 200:
+                    return True
+            else:
+                    return False
+        except requests.exceptions.RequestException:
+            return False
+
+    @staticmethod
     def check_issue_related_to_project(self):
+        
+        """Checks if the issue id is related to the project
+
+        Returns:
+            bool: True if the issue id belongs to the project and false if otherwise.
+        """
             
         json_data = json.loads(urlopen(f'https://api.github.com/repos/Be-Secure/Be-Secure/issues/{self.id}').read())
         issue_title = json_data["title"]
         project_name = str(str(issue_title).split(":")[1]).replace(" ","")
         if project_name != self.name:
-            print(f"[bold red]Alert! [yellow]Mismatch issue_id-project : [green] Issue id {self.id} does not match the project {self.name}")
-            sys.exit()
+            return False
         else:
-            pass
-
-        
+            return True        
     
-    def check_repo_exists(self,name) -> None:
+    @staticmethod
+    def check_repo_exists(name: str):
+        url = f"https://github.com/Be-Secure/Be-Secure/{name}"
         try:
-            urlopen('https://api.github.com/repos/Be-Secure/'+name)
-        except Exception as e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            print("Could not find "+ name +" under Be-Secure")
-            sys.exit()
+            response = requests.head(url)
+            if response.status_code == 200:
+                    return True
+            else:
+                    return False
+        except requests.exceptions.RequestException:
+            return False
     
-    def write_tech_stack(self,bes_id):
+    @staticmethod
+    def write_tech_stack(bes_id: int):
         raw_data = urlopen("https://api.github.com/repos/Be-Secure/Be-Secure/issues/"+str(bes_id))
 
-        data = json.loads(raw_data.read())
+        data = json.loads(raw_data.read().decode())
 
         body_data = iter(data["body"].splitlines())
         found = "false"
@@ -59,7 +76,9 @@ class OSSPMaster():
                 s = str(s.split("]")[0])
                 break    
         return s
-    def write_project_repos_data(self,project_data):
+    
+    @staticmethod
+    def write_project_repos_data(project_data):
         project_repos = {
         "main_github_url": "",
         "main_bes_url": "",
@@ -118,9 +137,15 @@ class OSSPMaster():
     
     
     def GenerateOsspMaster(self, overwrite: bool):
-        self.check_issue_exists(self.id)
-        self.check_repo_exists(self.name)
-        self.check_issue_related_to_project()
+        if self.check_issue_exists(self.id) == False:
+            print(f"[bold red]Alert! [green]Could not find issue with id: {self.id}")
+            sys.exit()
+        if self.check_repo_exists(self.name) == False:
+            print(f"[bold red]Alert! [green]Could not find project with name: {self.name}")
+            sys.exit()            
+        if self.check_issue_related_to_project() == False:
+            print(f"[bold red]Alert! [yellow]Mismatch issue_id-project : [green] Issue id {self.id} does not match the project {self.name}")
+            sys.exit()
         osspoi_dir = os.environ['OSSPOI_DIR']
         namespace = os.environ['GITHUB_ORG']
         token = os.environ['GITHUB_AUTH_TOKEN']
