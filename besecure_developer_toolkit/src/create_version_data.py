@@ -106,7 +106,10 @@ class Version():
         version_tag = self.get_version_tag(self.issue_id)
         version_data_new["version"] = version_tag
         date = self.get_release_date(version_tag, self.name)
-        version_data_new["release_date"] = date
+        if date is None:
+            version_data_new["release_date"] = "Not Available"
+        else:
+            version_data_new["release_date"] = date
         path = osspoi_dir+"/version_details/" + \
             str(self.issue_id) + "-" + self.name + "-" "Versiondetails.json"
         if os.path.exists(path):
