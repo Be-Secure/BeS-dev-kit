@@ -1,10 +1,10 @@
 from typer.testing import CliRunner
-import os, json
+import os
+import json
 import pytest
 from besecure_developer_toolkit.cli import app
 from unittest.mock import patch
 from unittest.mock import Mock
-from urllib.request import urlopen
 from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
 
 runner = CliRunner()
@@ -187,3 +187,4 @@ def test_version_alpha():
             break   
     assert test_data["version"] == version
     assert test_data["release_date"] == release_date
+    

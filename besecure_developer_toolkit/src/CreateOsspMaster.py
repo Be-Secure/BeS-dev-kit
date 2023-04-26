@@ -1,4 +1,7 @@
-import sys, os, json, subprocess, requests
+import sys 
+import os 
+import json
+import requests
 from urllib.request import urlopen
 from rich import print
 
@@ -22,9 +25,9 @@ class OSSPMaster():
         try:
             response = requests.head(url)
             if response.status_code == 200:
-                    return True
+                return True
             else:
-                    return False
+                return False
         except requests.exceptions.RequestException:
             return False
 
@@ -51,9 +54,9 @@ class OSSPMaster():
         try:
             response = requests.head(url)
             if response.status_code == 200:
-                    return True
+                return True
             else:
-                    return False
+                return False
         except requests.exceptions.RequestException:
             return False
     
@@ -161,8 +164,6 @@ class OSSPMaster():
                 else:
                     write_flag = True
         if write_flag:
-            # proc = subprocess.Popen([f'curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer <YOUR-TOKEN>"-H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com//{namespace}/{self.name}'], stdout=subprocess.PIPE, shell=True)
-            # (out, err) = proc.communicate()
             url_data = urlopen('https://api.github.com/repos/Be-Secure/'+self.name)
             project_data = json.loads(url_data.read())
             ossp_data = json.loads('{}')
