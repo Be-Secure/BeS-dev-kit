@@ -5,7 +5,7 @@ import pytest
 from besecure_developer_toolkit.cli import app
 from unittest.mock import patch
 from unittest.mock import Mock
-from besecure_developer_toolkit.src.CreateOsspMaster import OSSPMaster
+from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 
 runner = CliRunner()
 
