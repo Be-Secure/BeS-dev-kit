@@ -1,5 +1,4 @@
 __pycache__/
-.vscode/
 .pytest_cache/
 dist/
 besecure_developer_toolkit/__pycache__/
