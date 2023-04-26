@@ -4,7 +4,7 @@ bes-dev-kit is a cli tool for generating metadata and assessment report for [BeS
 
 # Pre-requisites
 
-1. Python 3.x
+1. Python 3.10
 2. pip
 3. Github personal access token
 
