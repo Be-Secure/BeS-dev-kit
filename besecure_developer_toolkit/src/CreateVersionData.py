@@ -19,7 +19,7 @@ class Version():
             if len(i.strip()) == 0:
                 continue
             if len(i.strip()) != 0 and found == "true":             
-                break       
+                break
         return str(i)
     
     def get_release_date(self, version, name):
@@ -39,7 +39,7 @@ class Version():
             final_date = str(format_datetime.strftime("%d-%b-%Y"))
             return final_date
         except Exception:
-            print(f"Could not find release for version {version}, ignoring release date")
+            print(f"Version {version} not found, ignoring release date")
     
     def cleanup(self):
         if os.path.exists(f'/tmp/{self.name}') == True:
