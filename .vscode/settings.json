@@ -1,0 +1,13 @@
+{
+    "python.pythonPath": "env/bin/python",
+    "python.formatting.provider": "none",
+    "python.linting.pylintEnabled": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

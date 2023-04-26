@@ -1,14 +1,30 @@
-import sys, os, json, datetime, subprocess, shutil
-from rich import print
+"""
+    licence part todo
+"""
+import os
+import json
+import datetime
+import subprocess
+import shutil
 from urllib.request import urlopen
+from rich import print
+
+
 class Version():
-    def __init__(self, id: int, name: str):
-        self.id = id
+    """
+        create version details page
+    """
+
+    def __init__(self, issue_id: int, name: str):
+        self.issue_id = issue_id
         self.name = name
-         
-    def get_version_tag(self, bes_id):      
-        
-        raw_data = urlopen("https://api.github.com/repos/Be-Secure/Be-Secure/issues/"+str(bes_id))
+
+    def get_version_tag(self, bes_id):
+        """
+            fetch the version of the project
+        """
+        raw_data = urlopen(
+            f"https://api.github.com/repos/Be-Secure/Be-Secure/issues/{str(bes_id)}")
         data = json.loads(raw_data.read())
         body_data = iter(data["body"].splitlines())
         found = "false"
@@ -18,16 +34,29 @@ class Version():
                 continue
             if len(i.strip()) == 0:
                 continue
-            if len(i.strip()) != 0 and found == "true":             
+            if len(i.strip()) != 0 and found == "true":
                 break
         return str(i)
-    
+
     def get_release_date(self, version, name):
-        self.cleanup()        
-        os.system('git clone -q https://github.com/Be-Secure/' + name +' /tmp/'+name)
+        """Get release date of project
+
+        Args:
+            version (str): project version
+            name (str): project name
+
+        Returns:
+            str: date in dd-mmm-yyy format
+        """
+        self.cleanup()
+        os.system('git clone -q https://github.com/Be-Secure/' +
+                  name + ' /tmp/'+name)
         os.chdir('/tmp/'+name)
-        proc = subprocess.Popen(['git log --tags --simplify-by-decoration --pretty="format:%ci %d" | grep -w "'+version +'"'], stdout=subprocess.PIPE, shell=True)
-        (out, err) = proc.communicate()
+        proc = subprocess.Popen([
+            'git log --tags --simplify-by-decoration --pretty="format:%ci %d" | grep -w "' +
+            version + '"'
+        ], stdout=subprocess.PIPE, shell=True)
+        (out) = proc.communicate()
         date = str(out).split(" ")[0]
         raw_date = date.split("'")[1]
         split_date = raw_date.split("-")
@@ -42,20 +71,29 @@ class Version():
             print(f"Version {version} not found, ignoring release date")
     
     def cleanup(self):
-        if os.path.exists(f'/tmp/{self.name}') == True:
+        """
+            remove the file/directory from tmp
+        """
+        if os.path.exists(f'/tmp/{self.name}'):
             shutil.rmtree('/tmp/'+self.name)
-  
-    
+
     def overwrite_version_data(self, f, version_data_new, original_data, version_tag):
+        """
+            overwrite the version data for the specific version.
+        """
         for i in range(len(original_data)):
+            # Fixme
             if original_data[i]["version"] == version_tag:
                 original_data[i] = version_data_new
                 break
         f.seek(0)
         f.write(json.dumps(original_data, indent=4))
-        f.truncate
-        
+        f.truncate()
+
     def generate_version_data(self, overwrite: bool):
+        """
+            generate version details page in osspoi_datastore
+        """
         osspoi_dir = os.environ['OSSPOI_DIR']
         version_data_new = {
             "version": "",
@@ -64,40 +102,38 @@ class Version():
             "scorecard": "Not Available",
             "cve_details": "Not Available"
         }
-        version_tag = self.get_version_tag(self.id)
+        version_tag = self.get_version_tag(self.issue_id)
         version_data_new["version"] = version_tag
         date = self.get_release_date(version_tag, self.name)
-        if date is not None:
-            version_data_new["release_date"] = date
-        else:
-            version_data_new["release_date"] = "Not Available"
-        path = osspoi_dir+"/version_details/"+str(self.id) + "-" + self.name + "-" "Versiondetails.json"
+        version_data_new["release_date"] = date
+        path = osspoi_dir+"/version_details/" + \
+            str(self.issue_id) + "-" + self.name + "-" "Versiondetails.json"
         if os.path.exists(path):
-            f = open(path, "r+") 
+            f = open(path, "r+", encoding="utf-8")
             original_data = json.load(f)
             for i in range(len(original_data)):
+                # Fixme
                 if original_data[i]["version"] == version_data_new["version"] and not overwrite:
                     write_flag = False
-                    print(f"[bold red]Alert! [green]Version {version_tag} exists under {self.id}-{self.name}-Versiondetails.json ")
+                    alert = "[bold red]Alert! [green]Version"
+                    message = f"{alert} {version_tag} exists under"
+                    name = f"{self.issue_id}-{self.name}-Versiondetails.json"
+                    print(f"{message} {name}")
                     break
                 else:
                     write_flag = True
-            if write_flag == True and not overwrite:
+            if write_flag and not overwrite:
                 original_data.append(version_data_new)
                 f.seek(0)
                 f.write(json.dumps(original_data, indent=4))
-                f.truncate
-            elif write_flag == True and overwrite:
-                self.overwrite_version_data(f, version_data_new, original_data, version_tag)
+                f.truncate()
+            elif write_flag and overwrite:
+                self.overwrite_version_data(
+                    f, version_data_new, original_data, version_tag)
             else:
                 pass
         else:
-            f = open(path, "w")
-            data_to_write = []
-            data_to_write.insert(0, version_data_new)
-            f.write(json.dumps(data_to_write, indent=4))
+            f = open(path, "w", encoding="utf-8")
+            f.write(json.dumps(version_data_new, indent=4))
         self.cleanup()
         f.close()
-        
-        
-        
