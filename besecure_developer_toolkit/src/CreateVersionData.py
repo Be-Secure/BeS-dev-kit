@@ -31,9 +31,12 @@ class Version():
         date = str(out).split(" ")[0]
         raw_date = date.split("'")[1]
         split_date = raw_date.split("-")
+        yyyy = int(split_date[0])
+        mmm = int(split_date[1])
+        dd =  int(split_date[2])
         try:
-            format_datetime = datetime.datetime(int(split_date[0]), int(split_date[1]), int(split_date[2]))
-            final_date = str(format_datetime.strftime("%d-%b-%Y"))    
+            format_datetime = datetime.datetime(yyyy, mmm, dd)
+            final_date = str(format_datetime.strftime("%d-%b-%Y"))
             return final_date
         except Exception:
             print(f"Could not find release for version {version}, ignoring release date")
