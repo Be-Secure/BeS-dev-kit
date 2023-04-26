@@ -64,8 +64,8 @@ class Version():
             "scorecard": "Not Available",
             "cve_details": "Not Available"
         }
-        version_tag = self.get_version_tag(self.id)            
-        version_data_new["version"] = version_tag         
+        version_tag = self.get_version_tag(self.id)
+        version_data_new["version"] = version_tag
         date = self.get_release_date(version_tag, self.name)
         if date is not None:
             version_data_new["release_date"] = date
