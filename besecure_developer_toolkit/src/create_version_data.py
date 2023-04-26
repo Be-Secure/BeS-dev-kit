@@ -51,7 +51,7 @@ class Version():
             'git log --tags --simplify-by-decoration --pretty="format:%ci %d" | grep -w "' +
             version + '"'
         ], stdout=subprocess.PIPE, shell=True)
-        (out, err) = proc.communicate()
+        (out) = proc.communicate()
         date = str(out).split(" ")[0]
         raw_date = date.split("'")[1]
         split_date = raw_date.split("-")
@@ -105,8 +105,10 @@ class Version():
                 # Fixme
                 if original_data[i]["version"] == version_data_new["version"] and not overwrite:
                     write_flag = False
-                    print(
-                        f"[bold red]Alert! [green]Version {version_tag} exists under {self.id}-{self.name}-Versiondetails.json ")
+                    alert = "[bold red]Alert! [green]Version"
+                    message = f"{alert} {version_tag} exists under"
+                    name = f"{self.issue_id}-{self.name}-Versiondetails.json"
+                    print(f"{message} {name}")
                     break
                 else:
                     write_flag = True
