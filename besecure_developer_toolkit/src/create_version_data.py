@@ -7,7 +7,6 @@ import datetime
 import subprocess
 import shutil
 import urllib.request
-from urllib.request import urlopen
 from rich import print
 
 
@@ -58,19 +57,18 @@ class Version():
             version + '"'
         ], stdout=subprocess.PIPE, shell=True)
         (out) = proc.communicate()
-        date = str(out).split(" ", maxsplit=1)[0]
-        raw_date = date.split("'")[1]
-        split_date = raw_date.split("-")
-        yyyy = int(split_date[0])
-        mmm = int(split_date[1])
-        dd =  int(split_date[2])
         try:
+            date = str(out).split(" ", maxsplit=1)[0]
+            raw_date = date.split("'")[1]
+            split_date = raw_date.split("-")
+            yyyy = int(split_date[0])
+            mmm = int(split_date[1])
+            dd = int(split_date[2])
             format_datetime = datetime.datetime(yyyy, mmm, dd)
             final_date = str(format_datetime.strftime("%d-%b-%Y"))
             return final_date
-        except ValueError as exc:
+        except ValueError:
             print(f"Version {version} not found, ignoring release date")
-            print(exc)
 
     def cleanup(self):
         """
