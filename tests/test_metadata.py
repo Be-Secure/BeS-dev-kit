@@ -21,13 +21,13 @@ def ossp_master_fixture():
     obj = OSSPMaster(id, name)
     yield obj
 
+
 def test_check_issue_exists(ossp_master_fixture):
     with patch('besecure_developer_toolkit.src.CreateOsspMaster.requests.head') as mock_requests:
         mock_response = mock_requests.return_value
         mock_response.status_code = 200
         url = f"https://github.com/Be-Secure/Be-Secure/issues/{ossp_master_fixture.id}"
         assert OSSPMaster.check_issue_exists(ossp_master_fixture.id) == True
-        print(mock_requests.call_args_list)
         mock_requests.assert_called_once_with(url)
 
 def test_check_repo_exists(ossp_master_fixture):
@@ -36,7 +36,6 @@ def test_check_repo_exists(ossp_master_fixture):
         mock_response.status_code = 200
         url = f"https://github.com/Be-Secure/Be-Secure/{ossp_master_fixture.name}"
         assert OSSPMaster.check_repo_exists(ossp_master_fixture.name) == True
-        print(mock_requests.call_args_list)
         mock_requests.assert_called_once_with(url)
 
 def test_id_project_mismatch(ossp_master_fixture):
