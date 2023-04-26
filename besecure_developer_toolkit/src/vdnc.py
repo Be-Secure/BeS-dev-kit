@@ -1,3 +1,4 @@
+"""vdnc validate"""
 import sys
 import json
 from urllib.error import HTTPError

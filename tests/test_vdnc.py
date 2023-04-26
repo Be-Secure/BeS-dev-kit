@@ -1,7 +1,7 @@
 """Test cases for version details file naming convention"""
 from typer.testing import CliRunner
 from besecure_developer_toolkit.cli import app
-
+from besecure_developer_toolkit.src.vdnc import VdncValidate
 runner = CliRunner()
 
 
@@ -144,3 +144,23 @@ def test_vdnc_with_invalid_project():
     result = result.split("branch")[1]
     result = result.strip("\n")[1:]
     assert result == "Could not find bitttt under Be-Secure"
+
+
+def test_vdnc_check_under_OSSPMaster():
+    """check if mentioned project exists under OSSP-master.json file"""
+    issue_id = 405
+    name = "OpenIDM"
+    namespace = "pramit-d"
+    branch = "test-dev-kit"
+
+    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+                           "\n"+name+"\n"+namespace+"\n"+branch+"\n")
+    result = result.output
+    result = result.split("branch")[1]
+    result = result.strip("\n")[1:]
+    assert result == "Alert! OpenIDM does not exists "\
+        "under besecure-osspoi-datastore"
+
+
+def test_check_username():
+    pass
