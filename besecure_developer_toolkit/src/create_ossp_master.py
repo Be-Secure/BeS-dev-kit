@@ -125,9 +125,9 @@ class OSSPMaster():
         tags_json_data = urlopen(url)
         tags_dict = json.loads(tags_json_data.read())
         tags = []
-        for name in tags_dict:
-            # todo: fixme
-            tags.append(name)
+        for i in range(len(tags_dict)):
+            # Fixme
+            tags.append(tags_dict[i]["name"])
         return tags
 
     def write_languages(self, name):

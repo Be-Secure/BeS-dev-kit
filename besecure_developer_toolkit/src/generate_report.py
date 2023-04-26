@@ -89,9 +89,9 @@ class Report():
             score = score_data["criticality_score"]
 
         version_data = json.load(version_file)
-        for i, version in range(len(version_data)):
-            # fix me
-            if version == self.version:
+        for i in range(len(version_data)):
+            # Fixme
+            if version_data[i]["version"] == self.version:
                 version_data[i][self.report] = score
         version_file.seek(0)
         version_file.write(json.dumps(version_data, indent=4))

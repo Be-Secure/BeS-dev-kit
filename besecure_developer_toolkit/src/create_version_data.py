@@ -14,6 +14,7 @@ class Version():
     """
         create version details page
     """
+
     def __init__(self, issue_id: int, name: str):
         self.issue_id = issue_id
         self.name = name
@@ -47,9 +48,9 @@ class Version():
                   name + ' /tmp/'+name)
         os.chdir('/tmp/'+name)
         proc = subprocess.Popen([
-                'git log --tags --simplify-by-decoration --pretty="format:%ci %d" | grep -w "' +
-                version + '"'
-            ], stdout=subprocess.PIPE, shell=True)
+            'git log --tags --simplify-by-decoration --pretty="format:%ci %d" | grep -w "' +
+            version + '"'
+        ], stdout=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
         date = str(out).split(" ")[0]
         raw_date = date.split("'")[1]
@@ -70,9 +71,9 @@ class Version():
         """
             overwrite the version data for the specific version.
         """
-        for i, version in range(len(original_data)):
-            # fixme
-            if version == version_tag:
+        for i in range(len(original_data)):
+            # Fixme
+            if original_data[i]["version"] == version_tag:
                 original_data[i] = version_data_new
                 break
         f.seek(0)
@@ -100,13 +101,12 @@ class Version():
         if os.path.exists(path):
             f = open(path, "r+", encoding="utf-8")
             original_data = json.load(f)
-            for version in range(len(original_data)):
-                # fixme
-                if version == version_data_new["version"] and not overwrite:
+            for i in range(len(original_data)):
+                # Fixme
+                if original_data[i]["version"] == version_data_new["version"] and not overwrite:
                     write_flag = False
                     print(
-                        f"[bold red]Alert! [green]Version {version_tag} exists \
-                            under {self.id}-{self.name}-Versiondetails.json ")
+                        f"[bold red]Alert! [green]Version {version_tag} exists under {self.id}-{self.name}-Versiondetails.json ")
                     break
                 else:
                     write_flag = True
