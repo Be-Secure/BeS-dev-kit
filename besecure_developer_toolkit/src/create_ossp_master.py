@@ -4,7 +4,8 @@
 import sys
 import os
 import json
-from urllib.request import urlopen
+import urllib.request
+import requests
 from rich import print
 
 
@@ -17,73 +18,76 @@ class OSSPMaster():
         self.issue_id = issue_id
         self.name = name
 
-    def check_issue_exists(self, issue_id) -> None:
+    @staticmethod
+    def check_issue_exists(issue_id: int):
+        """Function to check if the issue exists
+
+        Args:
+            issue_id (int): Issue issue_id
+
+        Returns:
+            bool: True if issue exists and False if otherwise
         """
-            Check for issue id is exits or not.
-        """
+        url = f"https://github.com/Be-Secure/Be-Secure/issues/{issue_id}"
         try:
-            urlopen('https://github.com/Be-Secure/Be-Secure/issues/'+str(issue_id))
-        except Exception as err:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            print(
-                f"Could not find issue with id: {str(issue_id)}, error: {str(err)}")
-            sys.exit()
+            response = requests.head(url, timeout=10)
+            return response.status_code < 400
+        except requests.exceptions.RequestException:
+            return False
 
     def check_issue_related_to_project(self):
         """
             Check project name from issue
         """
-        json_data = json.loads(urlopen(
-            f'https://api.github.com/repos/Be-Secure/Be-Secure/issues/{self.issue_id}').read())
-        issue_title = json_data["title"]
-        project_name = str(str(issue_title).split(":")[1]).replace(" ", "")
-        if project_name != self.name:
-            print(
-                f"[bold red]Alert! [yellow]Mismatch issue_id-project : [green] \
-                    Issue id {self.issue_id} does not match the project {self.name}")
-            sys.exit()
+        url = f'https://api.github.com/repos/Be-Secure/Be-Secure/issues/{self.issue_id}'
+        with urllib.request.urlopen(url) as raw_data:
+            json_data = json.loads(raw_data.read())
+            issue_title = json_data["title"]
+            project_name = str(str(issue_title).split(":")[1]).replace(" ", "")
+            if project_name != self.name:
+                print("[bold red]Alert![yellow] Mismatch issue_id-project:" +
+                        f"[green] Issue id {self.issue_id} " +
+                        f"does not match the project {self.name}")
+                sys.exit()
 
-    def check_repo_exists(self, name) -> None:
+    @staticmethod
+    def check_repo_exists(name: str):
+        """Checks if the repo exists
+
+        Args:
+            name (str): Project name
         """
-            Check if repo exists in Be-Secure or not
-        """
+        url = f"https://github.com/Be-Secure/{name}"
         try:
-            urlopen('https://api.github.com/repos/Be-Secure/'+name)
-        except Exception as err:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            print(f"Could not find {name} under Be-Secure, Error: {err}")
-            sys.exit()
+            response = requests.head(url, timeout=10)
+            return response.status_code < 400
+        except requests.exceptions.RequestException:
+            return False
 
     def write_tech_stack(self, bes_id):
         """
             Check the tech Stack of the Project
         """
-        raw_data = urlopen(
-            "https://api.github.com/repos/Be-Secure/Be-Secure/issues/"+str(bes_id))
-
-        data = json.loads(raw_data.read())
-
-        body_data = iter(data["body"].splitlines())
-        found = "false"
-        for i in body_data:
-            if i == "### Tech Stack":
-                found = "true"
-                continue
-            if len(i.strip()) == 0:
-                continue
-            if len(i.strip()) != 0 and found == "true":
-                stack = str(i.split(" [")[1])
-                stack = str(stack.split("]")[0])
-                break
+        url = f"https://api.github.com/repos/Be-Secure/Be-Secure/issues/{str(bes_id)}"
+        with urllib.request.urlopen(url) as raw_data:
+            data = json.loads(raw_data.read())
+            body_data = iter(data["body"].splitlines())
+            found = "false"
+            for i in body_data:
+                if i == "### Tech Stack":
+                    found = "true"
+                    continue
+                if len(i.strip()) == 0:
+                    continue
+                if len(i.strip()) != 0 and found == "true":
+                    stack = str(i.split(" [")[1])
+                    stack = str(stack.split("]", maxsplit=1)[0])
+                    break
         return stack
 
     def write_project_repos_data(self, project_data):
         """
-            Create json report for repository reletated content
+            Create json report for repository related content
             like: main_github_url, main_bes_url etc...
         """
         project_repos = {
@@ -122,24 +126,24 @@ class OSSPMaster():
         """
         url = 'https://api.github.com/repos/Be-Secure/Be-Secure/issues/' + \
             str(bes_id)+'/labels'
-        tags_json_data = urlopen(url)
-        tags_dict = json.loads(tags_json_data.read())
-        tags = []
-        for i in range(len(tags_dict)):
-            # Fixme
-            tags.append(tags_dict[i]["name"])
-        return tags
+        with urllib.request.urlopen(url) as tags_json_data:
+            tags_dict = json.loads(tags_json_data.read())
+            tags = []
+            # pylint: disable=unused-variable
+            for i, tag_name in enumerate(tags_dict):
+                tags.append(tag_name["name"])
+            return tags
 
     def write_languages(self, name):
         """
             fetch the languages from github URL
         """
-        raw_data = urlopen(
-            "https://api.github.com/repos/Be-Secure/"+name+"/languages")
-        data = json.loads(raw_data.read())
+        url = f"https://api.github.com/repos/Be-Secure/{name}/languages"
+        with urllib.request.urlopen(url) as raw_data:
+            data = json.loads(raw_data.read())
         return data
 
-    def write_to_ossp_master(self, f, ossp_master_json, data, overwrite: bool):
+    def write_to_ossp_master(self, file_pointer, ossp_master_json, data, overwrite: bool):
         """
             Add or override the project details in ossp_master
         """
@@ -150,60 +154,60 @@ class OSSPMaster():
                     break
         else:
             ossp_master_json["items"].append(data)
-        f.seek(0)
-        f.write(json.dumps(ossp_master_json, indent=4))
-        f.truncate()
+        file_pointer.seek(0)
+        file_pointer.write(json.dumps(ossp_master_json, indent=4))
+        file_pointer.truncate()
 
     def generate_ossp_master(self, overwrite: bool):
         """
             Generate ossp master json report
         """
-        self.check_issue_exists(self.issue_id)
-        self.check_repo_exists(self.name)
+        if self.check_issue_exists(self.issue_id) is False:
+            sys.exit(f"Issue {self.issue_id} does not exist")
+        if self.check_repo_exists(self.name) is False:
+            sys.exit(f"Repo {self.name} does not exist")
         self.check_issue_related_to_project()
         osspoi_dir = os.environ['OSSPOI_DIR']
         write_flag = True
-        f = open(f"{osspoi_dir}/OSSP-Master.json", "r+", encoding="utf-8")
-        ossp_master_json = json.load(f)
-        if not overwrite:
-            for i in range(len(ossp_master_json["items"])):
-                if ossp_master_json["items"][i]["id"] == self.issue_id:
-                    print("[bold red]Alert! [green]Entry for "+str(self.issue_id) +
-                          "-"+self.name+" already present under OSSP-Master.json")
-                    write_flag = False
-                    break
-                else:
-                    write_flag = True
-        if write_flag:
-            url_data = urlopen(
-                f'https://api.github.com/repos/Be-Secure/{self.name}')
-            project_data = json.loads(url_data.read())
-            ossp_data = json.loads('{}')
-            repo_keys = [
-                "id", "bes_tracking_id", "issue_url", "name",
-                "full_name", "description", "bes_technology_stack",
-                "watchers_count", "forks_count", "stargazers_count",
-                "size", "open_issues", "created_at", "updated_at",
-                "pushed_at", "git_url", "clone_url", "html_url",
-                "homepage", "owner", "project_repos", "license",
-                "language", "tags"
-            ]
-            for i in repo_keys:
-                if i == "id" or i == "bes_tracking_id":
-                    ossp_data[i] = self.issue_id
-                elif i == "issue_url":
-                    ossp_data[i] = 'https://github.com/Be-Secure/Be-Secure/issues/' + \
-                        str(self.issue_id)
-                elif i == "bes_technology_stack":
-                    ossp_data[i] = self.write_tech_stack(self.issue_id)
-                elif i == "project_repos":
-                    ossp_data[i] = self.write_project_repos_data(project_data)
-                elif i == "tags":
-                    ossp_data[i] = self.write_tags(self.issue_id)
-                elif i == "language":
-                    ossp_data[i] = self.write_languages(self.name)
-                else:
-                    ossp_data[i] = project_data[i]
-            self.write_to_ossp_master(
-                f, ossp_master_json, ossp_data, overwrite)
-            f.close()
+        with open(f"{osspoi_dir}/OSSP-Master.json", "r+", encoding="utf-8") as file_pointer:
+            ossp_master_json = json.load(file_pointer)
+            if not overwrite:
+                for i in range(len(ossp_master_json["items"])):
+                    if ossp_master_json["items"][i]["id"] == self.issue_id:
+                        print("[bold red]Alert! [green]Entry for "+str(self.issue_id) +
+                            "-"+self.name+" already present under OSSP-Master.json")
+                        write_flag = False
+                        break
+            if write_flag:
+                url = f"https://api.github.com/repos/Be-Secure/{self.name}"
+                with urllib.request.urlopen(url) as url_data:
+                    project_data = json.loads(url_data.read())
+                ossp_data = json.loads('{}')
+                repo_keys = [
+                    "id", "bes_tracking_id", "issue_url", "name",
+                    "full_name", "description", "bes_technology_stack",
+                    "watchers_count", "forks_count", "stargazers_count",
+                    "size", "open_issues", "created_at", "updated_at",
+                    "pushed_at", "git_url", "clone_url", "html_url",
+                    "homepage", "owner", "project_repos", "license",
+                    "language", "tags"
+                ]
+                for i in repo_keys:
+                    if i in ('id', 'bes_tracking_id'):
+                        ossp_data[i] = self.issue_id
+                    elif i == "issue_url":
+                        ossp_data[i] = 'https://github.com/Be-Secure/Be-Secure/issues/' + \
+                            str(self.issue_id)
+                    elif i == "bes_technology_stack":
+                        ossp_data[i] = self.write_tech_stack(self.issue_id)
+                    elif i == "project_repos":
+                        ossp_data[i] = self.write_project_repos_data(project_data)
+                    elif i == "tags":
+                        ossp_data[i] = self.write_tags(self.issue_id)
+                    elif i == "language":
+                        ossp_data[i] = self.write_languages(self.name)
+                    else:
+                        ossp_data[i] = project_data[i]
+                self.write_to_ossp_master(
+                    file_pointer, ossp_master_json, ossp_data, overwrite)
+            file_pointer.close()
