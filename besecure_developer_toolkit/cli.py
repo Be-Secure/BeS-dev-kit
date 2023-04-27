@@ -31,6 +31,7 @@ def write_env_vars_file():
     with open(vars_file_path, 'w', encoding="utf-8") as file_pointer:
         file_pointer.write(json.dumps(env_vars, indent=4))
 
+
 def prompt_user(key, value):
     """Prompts user if any env var is empty
 
@@ -44,7 +45,8 @@ def prompt_user(key, value):
     while True:
         value = input(f"Enter the value for {key}:")
         if key != "GITHUB_AUTH_TOKEN" and not os.path.exists(value):
-            print(f"[bold red]Alert! [green]Path [yellow]{value} [green]does not exist")
+            print("[bold red]Alert! [green]Path " +
+                  f"[yellow]{value} [green]does not exist")
         else:
             break
     return value
@@ -57,7 +59,7 @@ def check_if_value_empty():
     vars_file_path = f"{vars_dir_path}/bes-dev-kit.json"
     with open(vars_file_path, 'r+', encoding="utf-8") as file_pointer:
         env_vars = json.load(file_pointer)
-        for key,value in env_vars.items():
+        for key, value in env_vars.items():
             if value == "":
                 new_value = prompt_user(key, value)
                 env_vars[key] = new_value
@@ -75,10 +77,9 @@ def set_env_vars():
     for key, value in env_vars.items():
         os.environ[key] = str(value)
 
+
 app = typer.Typer()
-
 generate_app = typer.Typer()
-
 app.add_typer(generate_app, name="generate")
 
 
