@@ -44,6 +44,15 @@ body:
         3. ...
     validations:
       required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      description: Select the OS where you faced the issue
+      options:
+        - Windows
+        - Linux
+        - Mac
   - type: textarea
     id: screenshot
     attributes:
