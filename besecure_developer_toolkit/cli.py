@@ -11,6 +11,7 @@ from besecure_developer_toolkit import __app_name__, __version__
 from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 from besecure_developer_toolkit.src.create_version_data import Version
 from besecure_developer_toolkit.src.generate_report import Report
+from besecure_developer_toolkit.src.vdnc import VdncValidate
 
 
 def set_env_vars():
@@ -88,6 +89,27 @@ def report(reports: List[str],
             elif i == "codeql":
                 codeql_obj = Report(issue_id, name, version, i)
                 codeql_obj.main()
+
+
+@validate.command("vdnc")
+def version_data_naming_convention_validation():
+    """ Check version details file naming convention """
+    try:
+        issue_id = int(input("Enter OSSP id:"))
+    except ValueError:
+        sys.exit("Input should be of type int")
+    name = str(input("Enter OSSP name:"))
+    namespace = str(input("Enter GitHub username:"))
+    branch = str(input("Enter branch:"))
+
+    version_data = VdncValidate(issue_id, name, namespace, branch)
+    version_data.verify_versiondetails_name()
+
+
+@validate.command("rnc")
+def report_naming_convention_validation():
+    """ Check report file naming convention """
+    print("Under Development")
 
 
 @app.callback()
