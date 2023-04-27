@@ -6,7 +6,7 @@ import json
 import datetime
 import subprocess
 import shutil
-from urllib.request import urlopen
+import urllib.request
 from rich import print
 
 
@@ -23,25 +23,30 @@ class Version():
         """
             fetch the version of the project
         """
-        raw_data = urlopen(
-            f"https://api.github.com/repos/Be-Secure/Be-Secure/issues/{str(bes_id)}")
-        data = json.loads(raw_data.read())
-        body_data = iter(data["body"].splitlines())
-        found = "false"
-        for i in body_data:
-            if i == "### Version of the project":
-                found = "true"
-                continue
-            if len(i.strip()) == 0:
-                continue
-            if len(i.strip()) != 0 and found == "true":
-                break
-
+        url = f"https://api.github.com/repos/Be-Secure/Be-Secure/issues/{str(bes_id)}"
+        with urllib.request.urlopen(url) as raw_data:
+            data = json.loads(raw_data.read())
+            body_data = iter(data["body"].splitlines())
+            found = "false"
+            for i in body_data:
+                if i == "### Version of the project":
+                    found = "true"
+                    continue
+                if len(i.strip()) == 0:
+                    continue
+                if len(i.strip()) != 0 and found == "true":
+                    break
         return str(i)
 
     def get_release_date(self, version, name):
-        """
-            fetch the release data of tracking project
+        """Get release date of project
+
+        Args:
+            version (str): project version
+            name (str): project name
+
+        Returns:
+            str: date in dd-mmm-yyy format
         """
         self.cleanup()
         os.system('git clone -q https://github.com/Be-Secure/' +
@@ -52,13 +57,18 @@ class Version():
             version + '"'
         ], stdout=subprocess.PIPE, shell=True)
         (out) = proc.communicate()
-        date = str(out).split(" ")[0]
-        raw_date = date.split("'")[1]
-        split_date = raw_date.split("-")
-        format_datetime = datetime.datetime(
-            int(split_date[0]), int(split_date[1]), int(split_date[2]))
-        final_date = str(format_datetime.strftime("%d-%b-%Y"))
-        return final_date
+        try:
+            date = str(out).split(" ", maxsplit=1)[0]
+            raw_date = date.split("'")[1]
+            split_date = raw_date.split("-")
+            yyyy = int(split_date[0])
+            mmm = int(split_date[1])
+            dd = int(split_date[2])
+            format_datetime = datetime.datetime(yyyy, mmm, dd)
+            final_date = str(format_datetime.strftime("%d-%b-%Y"))
+            return final_date
+        except ValueError:
+            print(f"Version {version} not found, ignoring release date")
 
     def cleanup(self):
         """
@@ -67,7 +77,7 @@ class Version():
         if os.path.exists(f'/tmp/{self.name}'):
             shutil.rmtree('/tmp/'+self.name)
 
-    def overwrite_version_data(self, f, version_data_new, original_data, version_tag):
+    def overwrite_version_data(self, file_pointer, version_data_new, original_data, version_tag):
         """
             overwrite the version data for the specific version.
         """
@@ -76,9 +86,9 @@ class Version():
             if original_data[i]["version"] == version_tag:
                 original_data[i] = version_data_new
                 break
-        f.seek(0)
-        f.write(json.dumps(original_data, indent=4))
-        f.truncate()
+        file_pointer.seek(0)
+        file_pointer.write(json.dumps(original_data, indent=4))
+        file_pointer.truncate()
 
     def generate_version_data(self, overwrite: bool):
         """
@@ -92,38 +102,41 @@ class Version():
             "scorecard": "Not Available",
             "cve_details": "Not Available"
         }
+        write_flag = True
         version_tag = self.get_version_tag(self.issue_id)
         version_data_new["version"] = version_tag
         date = self.get_release_date(version_tag, self.name)
-        version_data_new["release_date"] = date
+        if date is None:
+            version_data_new["release_date"] = "Not Available"
+        else:
+            version_data_new["release_date"] = date
         path = osspoi_dir+"/version_details/" + \
             str(self.issue_id) + "-" + self.name + "-" "Versiondetails.json"
         if os.path.exists(path):
-            f = open(path, "r+", encoding="utf-8")
-            original_data = json.load(f)
-            for i in range(len(original_data)):
-                # Fixme
-                if original_data[i]["version"] == version_data_new["version"] and not overwrite:
-                    write_flag = False
-                    alert = "[bold red]Alert! [green]Version"
-                    message = f"{alert} {version_tag} exists under"
-                    name = f"{self.issue_id}-{self.name}-Versiondetails.json"
-                    print(f"{message} {name}")
-                    break
+            with open(path, "r+", encoding="utf-8") as file_pointer:
+                original_data = json.load(file_pointer)
+                for i in range(len(original_data)):
+                    # Fixme
+                    if original_data[i]["version"] == version_data_new["version"] and not overwrite:
+                        write_flag = False
+                        alert = "[bold red]Alert! [green]Version"
+                        message = f"{alert} {version_tag} exists under"
+                        name = f"{self.issue_id}-{self.name}-Versiondetails.json"
+                        print(f"{message} {name}")
+                        break
+                if write_flag and not overwrite:
+                    original_data.append(version_data_new)
+                    file_pointer.seek(0)
+                    file_pointer.write(json.dumps(original_data, indent=4))
+                    file_pointer.truncate()
+                elif write_flag and overwrite:
+                    self.overwrite_version_data(
+                        file_pointer, version_data_new, original_data, version_tag)
                 else:
-                    write_flag = True
-            if write_flag and not overwrite:
-                original_data.append(version_data_new)
-                f.seek(0)
-                f.write(json.dumps(original_data, indent=4))
-                f.truncate()
-            elif write_flag and overwrite:
-                self.overwrite_version_data(
-                    f, version_data_new, original_data, version_tag)
-            else:
-                pass
+                    pass
         else:
-            f = open(path, "w", encoding="utf-8")
-            f.write(json.dumps(version_data_new, indent=4))
+            with open(path, "w", encoding="utf-8") as file:
+                data = []
+                data.append(version_data_new)
+                file.write(json.dumps(data, indent=4))
         self.cleanup()
-        f.close()

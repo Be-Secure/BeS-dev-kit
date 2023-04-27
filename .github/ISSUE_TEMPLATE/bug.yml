@@ -1,0 +1,54 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    attributes:
+      label: Contribution guidelines
+      description: Please read the contribution guidelines before proceeding.
+      options:
+        - label: I've read the [contribution guidelines](https://be-secure.github.io/Be-Secure/contribute.html) and wholeheartedly agree 
+          required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Description
+      description: Please provide a brief description of the bug in 1-2 sentences.
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behaviour
+      description: Please describe precisely what you'd expect to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behaviour
+      description: Please describe precisely what is actually happening.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Please describe the steps to reproduce the bug.
+      placeholder: |-
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Relevant screenshots
+      placeholder: Please include relevant screenshots here.
+    validations:
+      required: true
+  
