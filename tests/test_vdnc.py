@@ -12,7 +12,7 @@ def test_vdnc():
     namespace = "Be-Secure"
     branch = "main"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -27,7 +27,7 @@ def test_vdnc_file_does_not_exists():
     namespace = "pramit-d"
     branch = "main"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -43,7 +43,7 @@ def test_vdnc_with_invalid_id():
     namespace = "pramit-d"
     branch = "Koha"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -59,7 +59,7 @@ def test_vdnc_with_invalid_version_tag():
     namespace = "pramit-d"
     branch = "Koha"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(
+    result = runner.invoke(app, ["validate", "version_file"], input=str(
         issue_id)+"\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -75,7 +75,7 @@ def test_vdnc_with_invalid_username():
     namespace = "prdut"
     branch = "main"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -90,7 +90,7 @@ def test_vdnc_with_invalid_branch():
     namespace = "pramit-d"
     branch = "xyz"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -106,7 +106,7 @@ def test_vdnc_with_invalid_repo():
     namespace = "arunpillai6"
     branch = "main"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -122,7 +122,7 @@ def test_vdnc_with_wrong_project():
     namespace = "Be-Secure"
     branch = "main"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -138,7 +138,7 @@ def test_vdnc_with_invalid_project():
     namespace = "Be-Secure"
     branch = "main"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
@@ -153,14 +153,10 @@ def test_vdnc_check_under_OSSPMaster():
     namespace = "pramit-d"
     branch = "test-dev-kit"
 
-    result = runner.invoke(app, ["validate", "vdnc"], input=str(issue_id) +
+    result = runner.invoke(app, ["validate", "version_file"], input=str(issue_id) +
                            "\n"+name+"\n"+namespace+"\n"+branch+"\n")
     result = result.output
     result = result.split("branch")[1]
     result = result.strip("\n")[1:]
     assert result == "Alert! OpenIDM does not exists "\
         "under besecure-osspoi-datastore"
-
-
-def test_check_username():
-    pass

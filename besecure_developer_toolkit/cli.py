@@ -91,7 +91,7 @@ def report(reports: List[str],
                 codeql_obj.main()
 
 
-@validate.command("vdnc")
+@validate.command("version_file")
 def version_data_naming_convention_validation():
     """ Check version details file naming convention """
     try:
@@ -106,7 +106,7 @@ def version_data_naming_convention_validation():
     version_data.verify_versiondetails_name()
 
 
-@validate.command("rnc")
+@validate.command("report_file")
 def report_naming_convention_validation():
     """ Check report file naming convention """
     print("Under Development")
