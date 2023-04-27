@@ -13,14 +13,51 @@ from besecure_developer_toolkit.src.create_version_data import Version
 from besecure_developer_toolkit.src.generate_report import Report
 
 
+def write_env_vars_file():
+    
+    user_home = os.path.expanduser('~')
+    vars_file_path = f"{user_home}/bes-dev-kit.json"
+    vars = {
+        "GITHUB_ORG": "Be-Secure",
+        "OSSPOI_DIR": "",
+        "ASSESSMENT_DIR": "",
+        "GITHUB_AUTH_TOKEN": ""
+    }
+    if os.path.exists(vars_file_path):
+        return
+    else:
+        print(f"[bold red]Alert! [green]Creating environment variables file")
+        f = open(vars_file_path, "w")
+        f.write(json.dumps(vars, indent=4))
+        f.close()
+
+def prompt_user(key, value):
+    value = input(f"Enter the value for {key}:")
+    return value
+
+def check_if_value_empty():
+    user_home = os.path.expanduser('~')
+    vars_file_path = f"{user_home}/bes-dev-kit.json"
+    f = open(vars_file_path, "r+")
+    vars = json.load(f)
+    for key,value in vars.items():
+        print(f"{key}:{value}")
+        if value == "":
+            new_value = prompt_user(key, value)
+            vars[key] = new_value
+    f.seek(0)
+    f.write(json.dumps(vars, indent=4))
+    f.close()
+
 def set_env_vars():
     user_home = os.path.expanduser('~')
-    with open(user_home+'/bes_dev_kit.json', 'r', encoding="utf-8") as f:
+    with open(user_home+'/bes-dev-kit.json', 'r') as f:
         vars = json.load(f)
     for key, value in vars.items():
         os.environ[key] = str(value)
 
-
+write_env_vars_file()
+check_if_value_empty()
 set_env_vars()
 
 app = typer.Typer()
