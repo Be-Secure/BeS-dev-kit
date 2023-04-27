@@ -45,8 +45,9 @@ class OSSPMaster():
             issue_title = json_data["title"]
             project_name = str(str(issue_title).split(":")[1]).replace(" ", "")
             if project_name != self.name:
-                print("[bold red]Alert! [yellow]Mismatch issue_id-project: ", end='')
-                print(f"[green]Issue id {self.issue_id} does not match the project {self.name}")
+                print("[bold red]Alert![yellow] Mismatch issue_id-project:"+
+                    f"[green] Issue id {self.issue_id} "+
+                    f"does not match the project {self.name}")
                 sys.exit()
 
     @staticmethod
