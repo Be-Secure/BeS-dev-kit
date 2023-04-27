@@ -136,5 +136,7 @@ class Version():
                     pass
         else:
             with open(path, "w", encoding="utf-8") as file:
-                file.write(json.dumps(version_data_new, indent=4))
+                data = []
+                data.append(version_data_new)
+                file.write(json.dumps(data, indent=4))
         self.cleanup()
