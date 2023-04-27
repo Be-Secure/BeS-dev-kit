@@ -1,7 +1,6 @@
 """Test cases for version details file naming convention"""
 from typer.testing import CliRunner
 from besecure_developer_toolkit.cli import app
-from besecure_developer_toolkit.src.vdnc import VdncValidate
 runner = CliRunner()
 
 

@@ -32,8 +32,6 @@ validate = typer.Typer()
 app.add_typer(generate_app, name="generate")
 app.add_typer(validate, name="validate")
 
-
-
 def _version_callback(value: bool) -> None:
     if value:
         typer.echo(f"{__app_name__} v{__version__}")
