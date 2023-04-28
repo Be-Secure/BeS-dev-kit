@@ -28,7 +28,6 @@ class Report():
             f_critical = open('/tmp/'+self.report+'.json', 'r', encoding="utf-8")
             data = json.load(f_critical)
             f_critical.close()
-
         elif self.report == "codeql":
             token = os.environ['GITHUB_AUTH_TOKEN']
             cmd = 'curl -s -L -H "Accept: application/vnd.github+json" \
@@ -38,7 +37,6 @@ class Report():
             codeql_f = open('/tmp/'+self.report+'.json', 'r', encoding="utf-8")
             data = json.load(codeql_f)
             codeql_f.close()
-
         else:
             try:
                 raw_data = urlopen(url)
@@ -57,17 +55,16 @@ class Report():
             in assesment data store
         """
         assessment_dir = os.environ['ASSESSMENT_DIR']
-
-        path = assessment_dir+'/'+self.name+'/'+self.version+'/'+self.report
-
+        if self.report == "codeql":
+            path = assessment_dir+'/'+self.name+'/'+self.version+'/sast'
+        else:
+            path = assessment_dir+'/'+self.name+'/'+self.version+'/'+self.report
         try:
             os.makedirs(path, exist_ok=True)
         except FileExistsError as err:
             print(f"error to create file Error: {err}")
-
         f = open(path + '/' + self.name + '-' + self.version +
                  '-' + self.report + '-report.json', "w", encoding="utf-8")
-
         f.write(json.dumps(data, indent=4))
 
     def update_version_data(self):

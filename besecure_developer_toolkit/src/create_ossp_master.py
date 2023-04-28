@@ -28,7 +28,7 @@ class OSSPMaster():
         Returns:
             bool: True if issue exists and False if otherwise
         """
-        url = f"https://github.com/Be-Secure/Be-Secure/issues/{issue_id}"
+        url = f"https://api.github.com/repos/Be-Secure/Be-Secure/issues/{issue_id}"
         try:
             response = requests.head(url, timeout=10)
             return response.status_code < 400
@@ -57,7 +57,7 @@ class OSSPMaster():
         Args:
             name (str): Project name
         """
-        url = f"https://github.com/Be-Secure/{name}"
+        url = f"https://api.github.com/repos/Be-Secure/{name}"
         try:
             response = requests.head(url, timeout=10)
             return response.status_code < 400
@@ -163,9 +163,13 @@ class OSSPMaster():
             Generate ossp master json report
         """
         if self.check_issue_exists(self.issue_id) is False:
-            sys.exit(f"Issue {self.issue_id} does not exist")
+            print("[bold red]Alert! [green]Issue " +
+                  f"[yellow]{self.issue_id} [green]does not exist")
+            sys.exit()
         if self.check_repo_exists(self.name) is False:
-            sys.exit(f"Repo {self.name} does not exist")
+            print("[bold red]Alert! [green]Repo [yellow]" +
+                  f"{self.name} [green]does not exist")
+            sys.exit()
         self.check_issue_related_to_project()
         osspoi_dir = os.environ['OSSPOI_DIR']
         write_flag = True

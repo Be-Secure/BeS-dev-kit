@@ -13,23 +13,6 @@ bes-dev-kit is a cli tool for generating metadata and assessment report for [BeS
 `$ python3 -m pip install besecure-developer-toolkit`
 
 
-# Setting env variables
-
-`Note: Should be done before testing/running`
-
-1. Creating a json file in your user home dir under the name `bes_dev_kit.json`.
-2. Copy the below contents and paste it inside the file.
-   
-        {
-        "GITHUB_ORG": "Be-Secure",
-        "OSSPOI_DIR": "<complete_path_to>/besecure-osspoi-datastore",
-        "ASSESSMENT_DIR": "<complete_path_to>/besecure-assessment-datastore",
-        "GITHUB_AUTH_TOKEN": "<token>"
-        }
-3. Update `OSSPOI_DIR` and `ASSESSMENT_DIR` with complete path to your `besecure-assessment-datastore` and `besecure-osspoi-datastore`  dirs.
-4. Add your github personal access token
-
-
 # Setting up locally
 
 1. Install [poetry](https://python-poetry.org/). Use the [link](https://python-poetry.org/docs/) to install Poetry.
@@ -47,7 +30,6 @@ bes-dev-kit is a cli tool for generating metadata and assessment report for [BeS
 Command helps to generate metadata such as OSSP-master file data and version details file.
 
 `$ bes-dev-kit generate metadata`
-
 For more options use `--help` at end.
 
 ### Generate Reports
