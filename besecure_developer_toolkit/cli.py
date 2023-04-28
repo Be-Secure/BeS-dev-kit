@@ -10,7 +10,8 @@ from besecure_developer_toolkit import __app_name__, __version__
 from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 from besecure_developer_toolkit.src.create_version_data import Version
 from besecure_developer_toolkit.src.generate_report import Report
-
+import ssl
+ssl._create_default_https_context = ssl._create_stdlib_context
 
 def write_env_vars_file():
     """Creates an env var file
