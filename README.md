@@ -12,17 +12,6 @@ bes-dev-kit is a cli tool for generating metadata and assessment report for [BeS
 
 `$ python3 -m pip install besecure-developer-toolkit`
 
-
-# Setting up locally
-
-1. Install [poetry](https://python-poetry.org/). Use the [link](https://python-poetry.org/docs/) to install Poetry.
-2. Clone the repo.
-3. Move into the cloned directory.
-4. Run the command - `$ poetry add "typer[all]"`
-5. Create a new virtual env using Poetry - `$ poetry shell`
-6. Run the command to install the tool- `$ poetry install`
-7. Check installation - `$ bes-dev-kit --help`
-
 # Usage
 
 If you are running the command for the first time, you will be prompted to provide the complete path to your `besecure-osspoi-datastore` and `besecure-assessment-datastore` and your `personal access token`
@@ -52,3 +41,15 @@ For more options use `--help` at end.
 ![report help](docs/generate_report_help.gif)
 
 `Note: All three reports can be generated at once by passing all report names - $ bes-dev-kit generate report scorecard criticality_score codeql`
+
+# Setting up locally
+
+1. Install [poetry](https://python-poetry.org/). Use the [link](https://python-poetry.org/docs/) to install Poetry.
+2. Clone the repo.
+3. Move into the cloned directory.
+4. Run the command - `$ poetry add "typer[all]"`
+5. Create a new virtual env using Poetry - `$ poetry shell`
+6. Run the command to install the tool- `$ poetry install`
+7. Check installation - `$ bes-dev-kit --help`
+
+
