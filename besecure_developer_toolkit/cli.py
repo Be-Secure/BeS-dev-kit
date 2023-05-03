@@ -10,7 +10,7 @@ from besecure_developer_toolkit import __app_name__, __version__
 from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 from besecure_developer_toolkit.src.create_version_data import Version
 from besecure_developer_toolkit.src.generate_report import Report
-from besecure_developer_toolkit.src.vdnc import VdncValidate
+from besecure_developer_toolkit.src.vdnc import VersionFileValidate
 import ssl
 ssl._create_default_https_context = ssl._create_stdlib_context
 
@@ -85,7 +85,9 @@ generate_app = typer.Typer()
 validate = typer.Typer()
 
 app.add_typer(generate_app, name="generate")
-app.add_typer(validate, name="validate")
+app.add_typer(validate,
+              name="validate",
+              help="Version details file naming convention validate")
 
 def _version_callback(value: bool) -> None:
     if value:
@@ -154,13 +156,29 @@ def report(
 
 @validate.command("version_file")
 def version_data_naming_convention_validation(
-    issue_id: int = typer.Option(None, prompt="Enter OSSP id", help="OSSP id"),
-    name: str = typer.Option(None, prompt="Enter OSSP name", help="OSSP name"),
-    namespace: str = typer.Option(None, prompt="Enter GitHub username", help="namespace"),
-    branch: str = typer.Option(None, prompt="Enter branch", help="branch"),
+    issue_id: int = typer.Option(
+                        None,
+                        prompt="Enter OSSP id",
+                        help="OSSP id"
+                    ),
+    name: str = typer.Option(
+                        None,
+                        prompt="Enter OSSP name",
+                        help="OSSP name"
+                    ),
+    namespace: str = typer.Option(
+                        None,
+                        prompt="Enter GitHub username",
+                        help="namespace"
+                    ),
+    branch: str = typer.Option(
+                        None,
+                        prompt="Enter branch",
+                        help="branch"
+                    ),
     ):
     """ Check version details file naming convention """
-    version_data = VdncValidate(issue_id, name, namespace, branch)
+    version_data = VersionFileValidate(issue_id, name, namespace, branch)
     version_data.verify_versiondetails_name()
 
 

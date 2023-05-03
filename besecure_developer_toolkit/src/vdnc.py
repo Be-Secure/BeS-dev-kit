@@ -6,7 +6,7 @@ from rich import print
 from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 
 
-class VdncValidate():
+class VersionFileValidate():
     """version details file naming convention validation class"""
 
     def __init__(self, issue_id: int, name: str, namespace: str, branch: str):
