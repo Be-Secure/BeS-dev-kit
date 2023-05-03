@@ -1,6 +1,5 @@
-"""vdnc validate"""
+"""Version details file validate"""
 import sys
-import json
 from urllib.error import HTTPError
 from urllib.request import urlopen
 from rich import print
