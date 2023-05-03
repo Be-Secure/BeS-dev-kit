@@ -89,6 +89,8 @@ class Version():
         file_pointer.seek(0)
         file_pointer.write(json.dumps(original_data, indent=4))
         file_pointer.truncate()
+        print("[bold red]Alert! [green]Version data for " +
+              f"[yellow]{self.name} {version_tag} [green]has been overwritten")
 
     def generate_version_data(self, overwrite: bool):
         """
@@ -129,6 +131,8 @@ class Version():
                     file_pointer.seek(0)
                     file_pointer.write(json.dumps(original_data, indent=4))
                     file_pointer.truncate()
+                    print("[bold red]Alert! [green]Appending details for [yellow]{self.name}" +
+                          f"{version_tag} into [yellow] {path}")
                 elif write_flag and overwrite:
                     self.overwrite_version_data(
                         file_pointer, version_data_new, original_data, version_tag)
@@ -139,4 +143,7 @@ class Version():
                 data = []
                 data.append(version_data_new)
                 file.write(json.dumps(data, indent=4))
+                print("[bold red]Alert! [green]Created version details file for" +
+                      f"[yellow] {self.issue_id}-{self.name} "+
+                      f"[green]with version:[yellow]{version_tag}")
         self.cleanup()

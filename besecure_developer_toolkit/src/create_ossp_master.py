@@ -32,7 +32,8 @@ class OSSPMaster():
         try:
             response = requests.head(url, timeout=10)
             return response.status_code < 400
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as exc:
+            print(exc)
             return False
 
     def check_issue_related_to_project(self):
@@ -61,7 +62,8 @@ class OSSPMaster():
         try:
             response = requests.head(url, timeout=10)
             return response.status_code < 400
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as exc:
+            print(exc)
             return False
 
     def write_tech_stack(self, bes_id):
@@ -157,6 +159,13 @@ class OSSPMaster():
         file_pointer.seek(0)
         file_pointer.write(json.dumps(ossp_master_json, indent=4))
         file_pointer.truncate()
+        if overwrite:
+            print("[bold red]Alert! [green]Data for " +
+                f"[yellow]{self.name} [green] in OSSP-Master.json has been overwritten")
+        else:
+            print("[bold red]Alert! [green]Added" +
+                f"[yellow]{self.name} [green]to OSSP-Master.json")
+
 
     def generate_ossp_master(self, overwrite: bool):
         """
