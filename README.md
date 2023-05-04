@@ -42,6 +42,12 @@ For more options use `--help` at end.
 
 `Note: All three reports can be generated at once by passing all report names - $ bes-dev-kit generate report scorecard criticality_score codeql`
 
+### Validate Version Details file & report files
+
+$ bes-dev-kit validate <version_file / report_file>`
+
+For more details use `--help` at end.
+
 # Setting up locally
 
 1. Install [poetry](https://python-poetry.org/). Use the [link](https://python-poetry.org/docs/) to install Poetry.
