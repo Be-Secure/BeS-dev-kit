@@ -44,7 +44,13 @@ For more options use `--help` at end.
 
 ### Validate Version Details file & report files
 
-$ bes-dev-kit validate <version_file / report_file>`
+`$ bes-dev-kit validate version_file`
+
+Command helps to validate the version details file.
+
+`$ bes-dev-kit validate report_file`
+
+Command helps to validate the report files.
 
 For more details use `--help` at end.
 
