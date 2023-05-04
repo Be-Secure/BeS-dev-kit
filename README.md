@@ -46,6 +46,8 @@ For more options use `--help` at end.
 
 `$ bes-dev-kit validate version_file`
 
+![validate version_file](docs/validate_version_file.gif)
+
 Command helps to validate the version details file.
 
 `$ bes-dev-kit validate report_file`
