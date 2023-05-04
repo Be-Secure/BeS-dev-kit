@@ -169,12 +169,12 @@ def version_data_naming_convention_validation(
     namespace: str = typer.Option(
                         None,
                         prompt="Enter GitHub username",
-                        help="namespace"
+                        help="GitHub Username"
                     ),
     branch: str = typer.Option(
                         None,
                         prompt="Enter branch",
-                        help="branch"
+                        help="besecure-osspoi-datastore branch"
                     ),
     ):
     """ Check version details file naming convention """
