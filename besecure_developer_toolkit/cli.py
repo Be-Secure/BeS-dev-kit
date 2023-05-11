@@ -11,6 +11,7 @@ from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 from besecure_developer_toolkit.src.create_version_data import Version
 from besecure_developer_toolkit.src.generate_report import Report
 from besecure_developer_toolkit.src.vdnc import VersionFileValidate
+from besecure_developer_toolkit.src.consolidated_assessment_report import Generate_report
 import ssl
 ssl._create_default_https_context = ssl._create_stdlib_context
 
@@ -180,6 +181,22 @@ def report_naming_convention_validation():
     """ Check report file naming convention """
     print("Under Development")
 
+@download.command('consolidated-assessment-report')
+def download_consolidate_assessment_report(
+    OSSP_name: str = typer.Option(
+                    None,
+                    prompt="Enter OSSP Name",
+                    help="OSSP Name"
+                ),
+    version: str = typer.Option(
+                    None,
+                    prompt="Enter OSSP Version",
+                    help="OSSP Version"
+                ),
+    ):
+    """Download consolidated assessment report in pdf format"""
+    report = Generate_report()
+    report.download_pdf(OSSP_name, version)
 
 @app.callback()
 def main(
