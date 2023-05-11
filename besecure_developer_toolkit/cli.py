@@ -81,13 +81,6 @@ def set_env_vars():
 
 
 app = typer.Typer()
-generate_app = typer.Typer()
-validate = typer.Typer()
-
-app.add_typer(generate_app, name="generate")
-app.add_typer(validate,
-              name="validate",
-              help="Version details file naming convention validate")
 
 def _version_callback(value: bool) -> None:
     if value:
@@ -95,7 +88,7 @@ def _version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
-@generate_app.command("metadata")
+@app.command("generate-metadata")
 def ossp(
     issue_id: int = typer.Option(None, prompt="Enter OSSP id", help="OSSP id"),
     name: str = typer.Option(None, prompt="Enter OSSP name", help="OSSP name"),
@@ -111,7 +104,7 @@ def ossp(
     version_data.generate_version_data(overwrite)
 
 
-@generate_app.command("report")
+@app.command("generate-report")
 def report(
     reports: List[str] = typer.Argument(None),
     get_all: bool = typer.Option(False, help="Get all 3 reports"),
@@ -154,7 +147,7 @@ def report(
             raise typer.Exit()
 
 
-@validate.command("version_file")
+@app.command("validate-version-file")
 def version_data_naming_convention_validation(
     issue_id: int = typer.Option(
                         None,
@@ -182,7 +175,7 @@ def version_data_naming_convention_validation(
     version_data.verify_versiondetails_name()
 
 
-@validate.command("report_file")
+@app.command("validate-report-file")
 def report_naming_convention_validation():
     """ Check report file naming convention """
     print("Under Development")
