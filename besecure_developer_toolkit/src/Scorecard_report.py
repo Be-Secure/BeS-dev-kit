@@ -21,7 +21,7 @@ def scorecard(ossp_name, version):
             sublist.append(obj["score"])
         else:
             sublist.append("Not Available")
-        reason = insert_newline_char(obj["reason"], 55, ' ')
+        reason = insert_newline_char(obj["reason"], 40, ' ')
         sublist.append(reason)
         data.append(sublist)
     data2 = [
