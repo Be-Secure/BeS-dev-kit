@@ -1,4 +1,5 @@
-import json, requests
+import json
+import requests
 import sys
 from rich import print
 from reportlab.platypus import Paragraph, Table
@@ -7,12 +8,14 @@ from reportlab.platypus import TableStyle
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
-from besecure_developer_toolkit.src.New_line_char import *
+from besecure_developer_toolkit.src.risk_summary.New_line_char import insert_newline_char
 
 def fossology(ossp_name, version):
     resp = getApiData(ossp_name, version)
     data = []
-    data.append(["File Name","License Concluded","File Copyright Text"])
+    data.append(["File Name",
+                 "License Concluded",
+                 "File Copyright Text"])
     for obj in resp[1:]:
         sublist = []
         if 'FileName' not in obj or obj["FileName"] == "":
@@ -47,9 +50,9 @@ def getApiData(ossp_name, version):
     try:
         url = 'https://raw.githubusercontent.com/Be-Secure/'\
             'besecure-assessment-datastore/main/'\
-            +ossp_name+'/'+version+\
+            + ossp_name + '/' + version + \
             '/license-compliance/'\
-            +ossp_name+'-'+version+\
+            + ossp_name + '-' + version + \
             '-fossology-report.json'
         resp = requests.get(url, timeout=5)
         # verify=False,

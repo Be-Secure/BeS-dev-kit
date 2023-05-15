@@ -7,7 +7,7 @@ from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
 from rich import print
-from besecure_developer_toolkit.src.New_line_char import *
+from besecure_developer_toolkit.src.risk_summary.New_line_char import insert_newline_char
 
 def sbom(OSSP_Name, version):
     '''return pdf elements of SBOM'''

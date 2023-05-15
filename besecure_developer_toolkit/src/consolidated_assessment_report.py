@@ -2,14 +2,15 @@
     utility for generate 
     assessment report summary
 '''
+import os
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib.pagesizes import letter
 from rich import print
-from besecure_developer_toolkit.src.Scorecard_report import scorecard
-from besecure_developer_toolkit.src.Sbom_report import sbom
-from besecure_developer_toolkit.src.License_compliance import fossology
-from besecure_developer_toolkit.src.Static_code_analysis import sonarqube
-from besecure_developer_toolkit.src.Objective import objective
+from besecure_developer_toolkit.src.risk_summary.Scorecard_report import scorecard
+from besecure_developer_toolkit.src.risk_summary.Sbom_report import sbom
+from besecure_developer_toolkit.src.risk_summary.License_compliance import fossology
+from besecure_developer_toolkit.src.risk_summary.Static_code_analysis import sonarqube
+from besecure_developer_toolkit.src.risk_summary.Objective import objective
 
 class Generate_report():
 
@@ -42,5 +43,4 @@ class Generate_report():
         bottomMargin=bottom_margin
         )
         pdf.build(elems)
-        print(f"[bold green]{fileName} [green]downloaded successfully")
-
+        print(f"[bold green]{fileName} [green]downloaded successfully at", os.getcwd())

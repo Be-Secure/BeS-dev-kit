@@ -78,5 +78,4 @@ def objective(OSSP_name, version):
         assessment_heading,
         line
     ]
-    
     return obj

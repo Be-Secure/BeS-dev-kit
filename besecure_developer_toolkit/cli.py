@@ -181,6 +181,7 @@ def report_naming_convention_validation():
     """ Check report file naming convention """
     print("Under Development")
 
+
 @app.command('risk-summary')
 def download_consolidate_assessment_report(
     OSSP_name: str = typer.Option(

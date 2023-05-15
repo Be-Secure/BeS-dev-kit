@@ -7,7 +7,7 @@ from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
 from rich import print
-from besecure_developer_toolkit.src.New_line_char import *
+from besecure_developer_toolkit.src.risk_summary.New_line_char import insert_newline_char
 
 def sonarqube(OSSP_Name, version):
     '''return pdf elements of sonarqube'''
@@ -130,7 +130,7 @@ def sonarqube(OSSP_Name, version):
     if major > 0:
         major = "\nMajor: " + str(major)
         code_smell_count += major
-    if  minor > 0:
+    if minor > 0:
         minor = "\nMinor: " + str(minor)
         code_smell_count += minor
     if info > 0:
@@ -141,9 +141,7 @@ def sonarqube(OSSP_Name, version):
         code_smell_count,
         code_smell_desc
     ])
-    
     table = Table(data, colWidths=(35*mm, 50*mm, 100*mm), repeatRows=1)
-
     style = TableStyle([
     ('BACKGROUND', (0,0), (3,0), colors.ReportLabBlueOLD),
     ('TEXTCOLOR',(0,0),(-1,0),colors.black),
