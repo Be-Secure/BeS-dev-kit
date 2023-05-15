@@ -63,9 +63,10 @@ class Report():
             os.makedirs(path, exist_ok=True)
         except FileExistsError as err:
             print(f"error to create file Error: {err}")
-        f = open(path + '/' + self.name + '-' + self.version +
-                 '-' + self.report + '-report.json', "w", encoding="utf-8")
+        file = f"{path}/{self.name}-{self.version}-{self.report}-report.json"
+        f = open(file, "w", encoding="utf-8")
         f.write(json.dumps(data, indent=4))
+        print(f"[bold red]Alert! [green]Added [yellow]{file}")
 
     def update_version_data(self):
         """
