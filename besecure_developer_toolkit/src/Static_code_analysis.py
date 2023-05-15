@@ -1,3 +1,4 @@
+import sys
 import json, requests
 from reportlab.platypus import Paragraph, Table
 from reportlab.lib.pagesizes import mm
@@ -5,12 +6,14 @@ from reportlab.platypus import TableStyle
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
-import sys
+from rich import print
 from besecure_developer_toolkit.src.New_line_char import *
 
 def sonarqube(OSSP_Name, version):
+    '''return pdf elements of sonarqube'''
     try:
-        url = 'https://raw.githubusercontent.com/Be-Secure/'\
+        url = 'https://raw.githubusercontent.com/'\
+            'Be-Secure/'\
             'besecure-assessment-datastore/main/'\
             +OSSP_Name+'/'+version+\
             '/sast/'\
@@ -30,32 +33,39 @@ def sonarqube(OSSP_Name, version):
         print("Exception request")
         sys.exit(1)
     if resp.text == '404: Not Found':
-        print('Invalid input')
+        print(f'[bold red]Alert! [green]Invalid '+
+              'input or Sonarqube'+
+              ' report not available for', OSSP_Name)
         sys.exit(1)
     resp = json.loads(resp.text)
     data = []
-    data.append(["Issue Type","Percentage/\nNo. of issues","Description"])
-    
+    data.append(["Issue Type",
+                 "Percentage/\nNo. of issues",
+                 "Description"])
     duplication_desc = "For Java projects there "\
         "should be at least 10 successive and "\
         "duplicated statements whatever the "\
         "number of tokens and lines. Differences "\
         "in indentation and in string literals are "\
         "ignored while detecting duplications."
-    duplication_desc = insert_newlines_char(duplication_desc, 55)
+    duplication_desc = insert_newline_char(
+                        duplication_desc,
+                        53, ' ')
     bug_desc = "A coding mistake that can "\
         "lead to an error or unexpected "\
         "behaviour at runtime"
-    bug_desc = insert_newlines_char(bug_desc, 55)
-
+    bug_desc = insert_newline_char(bug_desc, 55, ' ')
     vulnerability_desc = "A point in your code "\
         "that's open to cyber-attack"
-    vulnerability_desc = insert_newlines_char(vulnerability_desc, 55)
+    vulnerability_desc = insert_newline_char(
+                        vulnerability_desc,
+                        55, ' ')
     code_smell_desc = "A maintainability issue that "\
         "makes your code confusing and "\
         "diffucult to maintain"
-    code_smell_desc = insert_newlines_char(code_smell_desc, 55)
-
+    code_smell_desc = insert_newline_char(
+                    code_smell_desc,
+                    55, ' ')
     issues = resp['issues']
     duplication_count = 0
     code_smell_count = 0
@@ -66,7 +76,6 @@ def sonarqube(OSSP_Name, version):
     critical = 0
     info = 0 
     blocker = 0
-    # Loop through each issue and check if the "msg" property is "Duplication"
     duplication_list=[
         'Duplication',
         'Duplication.'
@@ -173,9 +182,23 @@ def sonarqube(OSSP_Name, version):
         spaceAfter = 10,
         spaceBefore = 10)
     sonarqube_heading = '<b>Static Code Analysis</b>'
-    sonarqube_heading = Paragraph(sonarqube_heading, heading_style)
+    sonarqube_heading = Paragraph(
+                        sonarqube_heading,
+                        heading_style)
     desc = 'Codebase: github.com/Be-Secure/' + OSSP_Name
-    tool_desc = '<b>Tool: Sonarqube</b> is an open-source platform for continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs and code smells on 30+ programming languages. SonarQube offers reports on duplicated code, coding standards, unit tests, code coverage, code complexity, comments, bugs, and security recommendations. In SonarQube a Quality Gate is a set of conditions the project must meet before it can qualify for production release.'
+    tool_desc = '<b>Tool: Sonarqube</b> is an '\
+        'open-source platform for continuous '\
+        'inspection of code quality to perform'\
+        ' automatic reviews with static analysis'\
+        ' of code to detect bugs and code smells'\
+        ' on 30+ programming languages. SonarQube '\
+        'offers reports on duplicated code, coding '\
+        'standards, unit tests, code coverage, code '\
+        'complexity, comments, bugs, and security'\
+        ' recommendations. In SonarQube a Quality'\
+        ' Gate is a set of conditions the project '\
+        'must meet before it can qualify for '\
+        'production release.'
     desc_style = ParagraphStyle(
         name='descStyle',
         leading=12,

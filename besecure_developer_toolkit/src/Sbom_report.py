@@ -1,3 +1,4 @@
+import sys
 import json, requests
 from reportlab.platypus import Paragraph, Table
 from reportlab.lib.pagesizes import mm
@@ -5,10 +6,11 @@ from reportlab.platypus import TableStyle
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
-import sys
+from rich import print
 from besecure_developer_toolkit.src.New_line_char import *
 
 def sbom(OSSP_Name, version):
+    '''return pdf elements of SBOM'''
     try:
         url = 'https://raw.githubusercontent.com/Be-Secure/'\
             'besecure-assessment-datastore/main/'\
@@ -21,7 +23,7 @@ def sbom(OSSP_Name, version):
         print("HTTP Error")
         sys.exit(1)
     except requests.exceptions.ReadTimeout:
-        print("Time out")
+        print("Request time out")
         sys.exit(1)
     except requests.exceptions.ConnectionError:
         print("Connection error")
@@ -30,7 +32,9 @@ def sbom(OSSP_Name, version):
         print("Exception request")
         sys.exit(1)
     if resp.text == '404: Not Found':
-        print('Invalid input')
+        print(f'[bold red]Alert! [green]Invalid '+
+              'input or SBOM'+
+              ' report not available fo', OSSP_Name)
         sys.exit(1)
     resp = json.loads(resp.text)
     data = []
@@ -39,19 +43,22 @@ def sbom(OSSP_Name, version):
         if 'name' not in obj:
             continue
         sublist = []
-        name = newlines_char2(obj["name"],25)
+        name = insert_newline_char(obj["name"],25, '-')
         sublist.append(name)
         if 'versionInfo' in obj:
-            sublist.append(obj["versionInfo"])
+            sublist.append(
+                insert_newline_char(obj["versionInfo"],
+                13,
+                ' ')
+            )
         else:
             sublist.append("Not Available")
-        reason = insert_newlines_char(obj["supplier"], 55)
-        sublist.append(reason)
+        supplier = insert_newline_char(obj["supplier"], 55, ' ')
+        sublist.append(supplier)
         data.append(sublist)
     creator = resp["creationInfo"]["creators"]
     tool = "<b>" + creator[len(creator)-1] + "</b>"
     table = Table(data, colWidths=(50*mm, 35*mm, 100*mm), repeatRows=1)
-
     style = TableStyle([
     ('BACKGROUND', (0,0), (3,0), colors.ReportLabBlueOLD),
     ('TEXTCOLOR',(0,0),(-1,0),colors.black),
@@ -62,7 +69,6 @@ def sbom(OSSP_Name, version):
     ('BACKGROUND',(0,1),(-1,-1),colors.beige),
     ])
     table.setStyle(style)
-
     # 2) Alternate backgroud color
     rowNumb = len(data)
     for i in range(1, rowNumb):
@@ -74,7 +80,6 @@ def sbom(OSSP_Name, version):
             [('BACKGROUND', (0,i),(-1,i), bc)]
         )
         table.setStyle(ts)
-
     # 3) Add borders
     ts = TableStyle(
         [
@@ -93,9 +98,21 @@ def sbom(OSSP_Name, version):
         textColor=HexColor('#23395d'),
         spaceAfter = 10,
         spaceBefore = 15)
-    sbom_heading = '<b>Dependency Review Using Software Bill of Materials (SBOM)</b>'
+    sbom_heading = '<b>Dependency Review Using '\
+        'Software Bill of Materials (SBOM)</b>'
     sbom_heading = Paragraph(sbom_heading, heading_style)
-    desc = 'A “software bill of materials” (SBOM) has emerged as a key building block in software supply chain risk management. It is a complete, formally structured list of components, libraries, and modules that are required to build (i.e., compile and link) a given piece of software and the supply chain relationships between them. An SBOM is useful to producers and consumers of software, as it provides software transparency, software integrity, and software identity benefits.'
+    desc = 'A “software bill of materials” '\
+        '(SBOM) has emerged as a key building'\
+        ' block in software supply chain risk '\
+        'management. It is a complete, formally'\
+        ' structured list of components, libraries,'\
+        ' and modules that are required to build'\
+        ' (i.e., compile and link) a given piece '\
+        'of software and the supply chain relationships'\
+        ' between them. An SBOM is useful to producers'\
+        ' and consumers of software, as it provides'\
+        ' software transparency, software integrity,'\
+        ' and software identity benefits.'
     desc_style = ParagraphStyle(
         name='descStyle',
         leading=12,

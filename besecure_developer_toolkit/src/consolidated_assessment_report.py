@@ -4,6 +4,7 @@
 '''
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib.pagesizes import letter
+from rich import print
 from besecure_developer_toolkit.src.Scorecard_report import scorecard
 from besecure_developer_toolkit.src.Sbom_report import sbom
 from besecure_developer_toolkit.src.License_compliance import fossology
@@ -27,7 +28,7 @@ class Generate_report():
         elems = self.generate_report()
         fileName = self.OSSP_Name+\
         '-'+self.version+'-'\
-        'assessment-report.pdf'
+        'risk-summary.pdf'
         left_margin = 50
         right_margin = 50
         top_margin = 50
@@ -41,4 +42,5 @@ class Generate_report():
         bottomMargin=bottom_margin
         )
         pdf.build(elems)
+        print(f"[bold green]{fileName} [green]downloaded successfully")
 

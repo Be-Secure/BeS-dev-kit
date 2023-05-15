@@ -1,5 +1,6 @@
 import json, requests
 import sys
+from rich import print
 from reportlab.platypus import Paragraph, Table
 from reportlab.lib.pagesizes import mm
 from reportlab.platypus import TableStyle
@@ -16,10 +17,10 @@ def fossology(ossp_name, version):
         sublist = []
         if 'FileName' not in obj or obj["FileName"] == "":
             continue
-        file_name = insert_newlines_char3(obj["FileName"],26)
+        file_name = insert_newline_char(obj["FileName"], 26, '/')
         sublist.append(file_name)
-        sublist.append(obj["LicenseConcluded"])
-        file_copyright_text = insert_newlines_char(obj["FileCopyrightText"], 37)
+        sublist.append(insert_newline_char(obj["LicenseConcluded"], 20, ' '))
+        file_copyright_text = insert_newline_char(obj["FileCopyrightText"], 37, ' ')
         sublist.append(file_copyright_text)
         data.append(sublist)
 
@@ -65,7 +66,8 @@ def getApiData(ossp_name, version):
         print("Exception request")
         sys.exit(1)
     if resp.text == '404: Not Found':
-        print('Invalid input')
+        print(f'[bold red]Alert! Invalid input or Fossology'+
+              ' report not available for',ossp_name)
         sys.exit(1)
     return json.loads(resp.text)
 

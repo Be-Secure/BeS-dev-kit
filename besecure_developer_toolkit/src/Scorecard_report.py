@@ -6,9 +6,11 @@ from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
 import sys
+from rich import print
 from besecure_developer_toolkit.src.New_line_char import *
 
 def scorecard(ossp_name, version):
+    '''return pdf elements of Scorecard'''
     resp = getApiData(ossp_name, version)
     data = []
     data.append(["Name","Score","Reason"])
@@ -19,10 +21,9 @@ def scorecard(ossp_name, version):
             sublist.append(obj["score"])
         else:
             sublist.append("Not Available")
-        reason = insert_newlines_char(obj["reason"], 55)
+        reason = insert_newline_char(obj["reason"], 55, ' ')
         sublist.append(reason)
         data.append(sublist)
-    
     data2 = [
         ['Score', 'Risk Category'],
         [10, 'Critical Risk'],
@@ -32,10 +33,8 @@ def scorecard(ossp_name, version):
     ]
     table1 = Table(data, colWidths=(50*mm, 30*mm, 100*mm), repeatRows=1)
     table1 = getTableStyle(table1, len(data))
-    
     table2 = Table(data2, colWidths=(20*mm, 40*mm), repeatRows=1)
     table2 = getTableStyle(table2, len(data2))
-    
     desc_style = ParagraphStyle(
         name='descStyle',
         leading=12,
@@ -67,6 +66,7 @@ def scorecard(ossp_name, version):
     return pages
 
 def getApiData(ossp_name, version):
+    '''return data of API call'''
     try:
         url = 'https://raw.githubusercontent.com/Be-Secure/'\
             'besecure-assessment-datastore/main/'\
@@ -88,12 +88,15 @@ def getApiData(ossp_name, version):
         print("Exception request")
         sys.exit(1)
     if resp.text == '404: Not Found':
-        print('Invalid input')
+        print(f'[bold red]Alert! [green]Invalid'+
+              ' input or Scorecard'+
+              ' report not available for', ossp_name)
         sys.exit(1)
     resp = json.loads(resp.text)
     return resp
 
 def getTableStyle(table, length):
+    '''return table style of Scorecard checks'''
     style = TableStyle([
     ('BACKGROUND', (0,0), (3,0), colors.ReportLabBlueOLD),
     ('TEXTCOLOR',(0,0),(-1,0),colors.black),
@@ -126,6 +129,7 @@ def getTableStyle(table, length):
     return table
 
 def getHeading():
+    '''return Heading of Scorecard'''
     heading_style = ParagraphStyle(
         name='Heading1',
         fontName='Helvetica-Bold',
@@ -135,10 +139,13 @@ def getHeading():
         spaceAfter = 10,
         spaceBefore = 10)
     scorecard_heading = '<b>ScoreCard</b>'
-    scorecard_heading = Paragraph(scorecard_heading, heading_style)
+    scorecard_heading = Paragraph(
+                        scorecard_heading,
+                        heading_style)
     return scorecard_heading
 
 def getDesc(code_base, score, desc_style):
+    '''return description of Scorecard'''
     category = ""
     if float(score) <= 2.5:
         category = " (Low Risk)"
@@ -149,7 +156,10 @@ def getDesc(code_base, score, desc_style):
     elif float(score) <= 10:
         category = " (Critical Risk)"
     code_base = "Code Base: " + code_base
-    risk_score = '<br />' + "Risk Score: <b>" + str(score) +'</b>'+ category +'<br />'
-    desc = code_base + risk_score + 'Detailed Checks:' + '<br />'
+    risk_score = '<br />' + "Risk Score: <b>"\
+                + str(score) +'</b>'\
+                + category +'<br />'
+    desc = code_base + risk_score \
+            + 'Detailed Checks:' + '<br />'
     desc = Paragraph(desc, desc_style)
     return desc

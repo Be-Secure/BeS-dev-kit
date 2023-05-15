@@ -1,50 +1,28 @@
-import textwrap
-
-def insert_newlines_char(string, length):
-    words = string.split()
+def insert_newline_char(string, max_length, delimeter):
+    ''' Add new line char (\n) after a given length'''
+    if len(string) <= max_length:
+        return string
+    len_of_str = len(string)
+    i = 0
     lines = []
-    current_line = ""
-    for word in words:
-        if len(current_line + word) + 1 > length:
-            lines.append(current_line.strip())
-            current_line = word + " "
-        else:
-            current_line += word + " "
-    if current_line:
-        lines.append(current_line.strip())
-    return "\n".join(lines)
-
-def newlines_char2(string, length):
-    words = string.split('-')
-    lines = []
-    current_line = ""
-    for word in words:
-        if len(current_line + word) + 1 > length:
-            lines.append(current_line.strip())
-            current_line = word + "-"
-        else:
-            current_line += word + "-"
-    if current_line:
-        lines.append(current_line.rstrip(current_line[-1]))
-    return "\n".join(lines)
-
-def inser_newlines_char4(string, length):
-    new_string = ""
-    lines = textwrap.wrap(string, width=length)
-    for line in lines:
-        new_string += line + '\n'
-    new_string = new_string.rstrip()
-    return new_string
-    
-def insert_newlines_char3(string, length):
-    #string = string.strip()
-    words = string.split('/')
-    lines = []
-    current_line = ""
-    for word in words:
-        if len(current_line + word) + 1 > length:
-            lines.append(current_line.strip())
-        current_line = word + "/"
-    if current_line:
-        lines.append(current_line.rstrip(current_line[-1]))
+    prev_index = 0
+    break_index = 0
+    counter = 0
+    while i < len_of_str:
+        if string[i] == delimeter:
+            break_index = i
+        if counter == max_length:
+            counter = 0
+            if break_index <= prev_index:
+                lines.append(string[prev_index : i+1].strip())
+                prev_index = i + 1
+            else:
+                lines.append(string[prev_index : break_index+1].strip())
+                prev_index = break_index + 1
+        if i == len_of_str-1:
+            counter = 0
+            lines.append(string[prev_index : i+1].strip())
+            prev_index = i + 1
+        i += 1
+        counter += 1
     return "\n".join(lines)
