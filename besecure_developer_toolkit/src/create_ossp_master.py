@@ -163,7 +163,7 @@ class OSSPMaster():
             print("[bold red]Alert! [green]Data for " +
                 f"[yellow]{self.name} [green] in OSSP-Master.json has been overwritten")
         else:
-            print("[bold red]Alert! [green]Added" +
+            print("[bold red]Alert! [green]Added " +
                 f"[yellow]{self.name} [green]to OSSP-Master.json")
 
 
