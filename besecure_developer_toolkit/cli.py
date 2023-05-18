@@ -229,6 +229,7 @@ def report_naming_convention_validation(
         report_name = report_name.lower()
         obj.validate_report_file(report_name)
 
+
 @app.command('risk-summary')
 def download_consolidate_assessment_report(
     OSSP_name: str = typer.Option(

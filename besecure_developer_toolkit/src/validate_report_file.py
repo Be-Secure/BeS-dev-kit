@@ -1,6 +1,8 @@
 import json
 import sys
 import requests
+from urllib.request import urlopen
+from urllib.error import HTTPError
 from besecure_developer_toolkit.src.vdnc import VersionFileValidate
 from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 from rich import print
@@ -135,7 +137,6 @@ class ReportFileValidate():
                 f'available for [yellow]{self.name},'\
                 f' version: {self.version}')
         
-
     def checkFossology(self):
         '''
             check if fossology report file exists
@@ -219,6 +220,19 @@ class ReportFileValidate():
         elif self.report_name == 'sbom':
             self.checkSbom()
 
+    def check_branch_exists(self):
+        """This method checks if the branch is exists
+        under besecure-osspoi-datastore for given user"""
+        try:
+            urlopen("https://api.github.com/repos/"+self.namespace +
+                    "/besecure-assessment-datastore"\
+                    "/branches/"+self.branch)
+        except HTTPError:
+            print(f"[bold red]Alert! [green]{self.branch} does not "
+                  f"exists besecure-assessment-"
+                  f"datastore for user {self.namespace}")
+            sys.exit()
+
     def validateIssue(self):
         obj = OSSPMaster(self.issue_id, self.name)
         obj2 = VersionFileValidate(
@@ -238,4 +252,4 @@ class ReportFileValidate():
             sys.exit()
         obj.check_issue_related_to_project()
         obj2.check_username()
-        obj2.check_branch_exists()
+        self.check_branch_exists()
