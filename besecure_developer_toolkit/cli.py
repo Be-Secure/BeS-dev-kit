@@ -1,7 +1,9 @@
 """This module provides the Be-Secure Developer Toolkit CLI."""
 # src/cli.py
 import os
+import ssl
 import json
+import sys
 from typing import Optional
 from typing import List
 from rich import print
@@ -12,7 +14,8 @@ from besecure_developer_toolkit.src.create_version_data import Version
 from besecure_developer_toolkit.src.generate_report import Report
 from besecure_developer_toolkit.src.vdnc import VersionFileValidate
 from besecure_developer_toolkit.src.consolidated_assessment_report import Generate_report
-import ssl
+from besecure_developer_toolkit.src.validate_report_file import ReportFileValidate
+
 ssl._create_default_https_context = ssl._create_stdlib_context
 
 def write_env_vars_file():
@@ -177,10 +180,54 @@ def version_data_naming_convention_validation(
 
 
 @app.command("validate-report-file")
-def report_naming_convention_validation():
+def report_naming_convention_validation(
+    reports: List[str] = typer.Argument(None),
+    get_all: bool = typer.Option(False, help="Get all 3 reports"),
+    issue_id: int = typer.Option(
+                        None,
+                        prompt="Enter OSSP id",
+                        help="OSSP id"
+                    ),
+    name: str = typer.Option(
+                        None,
+                        prompt="Enter OSSP name",
+                        help="OSSP name"
+                    ),
+    namespace: str = typer.Option(
+                        None,
+                        prompt="Enter GitHub username",
+                        help="GitHub Username"
+                    ),
+    branch: str = typer.Option(
+                        None,
+                        prompt="Enter branch",
+                        help="besecure-osspoi-datastore branch"
+                    )
+):
     """ Check report file naming convention """
-    print("Under Development")
-
+    report_list = ["scorecard",
+                   "criticality_score",
+                   "codeql",
+                   'fossology',
+                   'sonarqube',
+                   'sbom']
+    if reports:
+        # check if given parameters are valid
+        for i in reports:
+            if i.lower() not in report_list:
+                print(f'[red bold]Alart! [green]'\
+                    f'Invalid report name:'\
+                    f' [yellow]{i}')
+                sys.exit(1)
+        report_list = reports
+    obj = ReportFileValidate(issue_id,
+                        name,
+                        namespace,
+                        branch)
+    obj.validateIssue()
+    for report_name in report_list:
+        report_name = report_name.lower()
+        obj.validate_report_file(report_name)
 
 @app.command('risk-summary')
 def download_consolidate_assessment_report(
