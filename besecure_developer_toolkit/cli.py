@@ -220,13 +220,14 @@ def report_naming_convention_validation(
                     f' [yellow]{i}')
                 sys.exit(1)
         report_list = reports
-    obj = ReportFileValidate(issue_id,
-                        name,
-                        namespace,
-                        branch)
+    obj = ReportFileValidate(
+            issue_id,
+            name.strip(),
+            namespace.strip(),
+            branch.strip())
     obj.validateIssue()
     for report_name in report_list:
-        report_name = report_name.lower()
+        report_name = report_name.lower().strip()
         obj.validate_report_file(report_name)
 
 
