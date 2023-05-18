@@ -234,16 +234,18 @@ class ReportFileValidate():
             sys.exit()
 
     def check_repo_exists(self):
-        """This is an overriding method of CreateOsspMaster class
-        It checks if besecure-osspoi-datastore repo exists under the given user,
-        here flag is used for differentiate between base & child class method"""
+        """
+        It checks if besecure-assessment-datastore 
+        repo exists under the given user
+        """
         try:
             urlopen("https://api.github.com/repos/" +
                     self.namespace
-                    +"/besecure-assessment-datastore")
+                    + "/besecure-assessment-datastore")
         except HTTPError:
             print(f"[bold red]Alert! [green]Could not find "
-                  f"besecure-assessment-datastore under {self.namespace}")
+                  f"besecure-assessment-datastore "
+                  f"under {self.namespace}")
             sys.exit()
     
     def validateIssue(self):
