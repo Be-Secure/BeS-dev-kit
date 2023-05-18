@@ -229,10 +229,23 @@ class ReportFileValidate():
                     "/branches/"+self.branch)
         except HTTPError:
             print(f"[bold red]Alert! [green]{self.branch} does not "
-                  f"exists besecure-assessment-"
-                  f"datastore for user {self.namespace}")
+                  f"exists under {self.namespace}/besecure-assessment-"
+                  f"datastore")
             sys.exit()
 
+    def check_repo_exists(self):
+        """This is an overriding method of CreateOsspMaster class
+        It checks if besecure-osspoi-datastore repo exists under the given user,
+        here flag is used for differentiate between base & child class method"""
+        try:
+            urlopen("https://api.github.com/repos/" +
+                    self.namespace
+                    +"/besecure-assessment-datastore")
+        except HTTPError:
+            print(f"[bold red]Alert! [green]Could not find "
+                  f"besecure-assessment-datastore under {self.namespace}")
+            sys.exit()
+    
     def validateIssue(self):
         obj = OSSPMaster(self.issue_id, self.name)
         obj2 = VersionFileValidate(
@@ -252,4 +265,5 @@ class ReportFileValidate():
             sys.exit()
         obj.check_issue_related_to_project()
         obj2.check_username()
+        self.check_repo_exists()
         self.check_branch_exists()
