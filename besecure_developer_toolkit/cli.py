@@ -12,7 +12,7 @@ from besecure_developer_toolkit import __app_name__, __version__
 from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
 from besecure_developer_toolkit.src.create_version_data import Version
 from besecure_developer_toolkit.src.generate_report import Report
-from besecure_developer_toolkit.src.vdnc import VersionFileValidate
+from besecure_developer_toolkit.src.validate_version_file import VersionFileValidate
 from besecure_developer_toolkit.src.consolidated_assessment_report import Generate_report
 from besecure_developer_toolkit.src.validate_report_file import ReportFileValidate
 
