@@ -70,6 +70,26 @@ For more details use `--help` at end.
 
 ![validate version_file help](docs/validate-version-file--help.gif)
 
+### Validate Report files
+
+Command helps to check report files naming convention / if report file available.
+
+`$ bes-dev-kit validate-report-file <report name> ... <report name>`
+
+`Note: Provide listed parameters only. scorecard, codeql, criticality_score, sonarqube, sbom, fossology`
+
+![validate report_file](docs/validate-report-file.gif)
+
+Use bellow command to check all reports at a time.
+
+`$ bes-dev-kit validate-report-file`
+
+![validate report_file](docs/validate-report-file-all-report.gif)
+
+For more details use `--help` at end.
+
+![validate version_file help](docs/validate-report-file--help.gif)
+
 # Setting up locally
 
 1. Install [poetry](https://python-poetry.org/). Use the [link](https://python-poetry.org/docs/) to install Poetry.
