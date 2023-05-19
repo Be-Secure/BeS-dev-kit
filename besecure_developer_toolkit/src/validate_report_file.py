@@ -31,7 +31,7 @@ class ReportFileValidate():
             + str(issue_id)
         resp = requests.get(url,  timeout=5)
         if resp.status_code == 403:
-            print(f'[red bold]Alart! [yellow]'\
+            print(f'[red bold]Alert!! [yellow]'\
                     'GitHub API rate limit '\
                      'exceeded for this system')
             sys.exit(1)
@@ -48,21 +48,21 @@ class ReportFileValidate():
         try:
             resp = requests.get(url,  timeout=5)
         except requests.exceptions.HTTPError:
-            print(f"[bold red]Alart! [yellow]HTTP"\
+            print(f"[bold red]Alert!! [yellow]HTTP"\
                   " Error: Please try again")
             sys.exit(1)
         except requests.exceptions.ReadTimeout:
-            print(f"[bold red]Alart! [yellow]"\
+            print(f"[bold red]Alert! [yellow]"\
                 "Request time out: "\
                 "Please check your internet "\
                 "connection & try again")
             sys.exit(1)
         except requests.exceptions.ConnectionError:
-            print(f"[bold red]Alart! [yellow]"\
+            print(f"[bold red]Alert! [yellow]"\
                   "Connection error: Please try again")
             sys.exit(1)
         except requests.exceptions.RequestException:
-            print(f"[bold red]Alart! [yellow]"\
+            print(f"[bold red]Alert! [yellow]"\
                   "Exception request")
             sys.exit(1)
         if resp.text == '404: Not Found':
@@ -88,7 +88,7 @@ class ReportFileValidate():
             print(f'[green]{self.name}-{self.version}-'\
                   'scorecard-report.json exists')
         else:
-            print(f'[bold red]Alart! [green]scorecard report'\
+            print(f'[bold red]Alert! [green]scorecard report'\
                 f' not available for [yellow]{self.name},'\
                 f' version: {self.version}')
     
@@ -110,7 +110,7 @@ class ReportFileValidate():
             print(f'[green]{self.name}-{self.version}-'\
                   'criticality_score-report.json exists')
         else:
-            print(f'[bold red]Alart! [green]'\
+            print(f'[bold red]Alert! [green]'\
                 f'criticality_score report not available'\
                 f' for [yellow]{self.name},'\
                 f' version: {self.version}')
@@ -133,7 +133,7 @@ class ReportFileValidate():
             print(f'[green]{self.name}-{self.version}-'\
                   'codeql-report.json exists')
         else:
-            print(f'[bold red]Alart! [green]codeql report not '\
+            print(f'[bold red]Alert! [green]codeql report not '\
                 f'available for [yellow]{self.name},'\
                 f' version: {self.version}')
         
@@ -152,7 +152,7 @@ class ReportFileValidate():
             print(f'[green]{self.name}-{self.version}-'\
                   'fossology-report.json exists')
         else:
-            print(f'[bold red]Alart! [green]fossology report'\
+            print(f'[bold red]Alert! [green]fossology report'\
                 f' not available for [yellow]{self.name},'\
                 f' version: {self.version}')
         
@@ -174,7 +174,7 @@ class ReportFileValidate():
             print(f'[green]{self.name}-{self.version}-'\
                   'sonarqube-report.json exists')
         else:
-            print(f'[bold red]Alart! [green]sonarqube report not '\
+            print(f'[bold red]Alert! [green]sonarqube report not '\
             f'available for [yellow]{self.name},'\
             f' version: {self.version}')
 
@@ -196,7 +196,7 @@ class ReportFileValidate():
             print(f'[green]{self.name}-{self.version}-'\
                   'sbom-report.json exists')
         else:
-            print(f'[bold red]Alart! [green]sbom report not '\
+            print(f'[bold red]Alert! [green]sbom report not '\
                 f'available for [yellow]{self.name},'\
                 f' version: {self.version}')
     
