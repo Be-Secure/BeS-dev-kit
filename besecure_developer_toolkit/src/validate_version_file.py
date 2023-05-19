@@ -21,7 +21,7 @@ class VersionFileValidate():
             urlopen("https://api.github.com/users/"+self.namespace)
         except HTTPError:
             print(f"[bold red]Alert! [green]"
-                  f"{self.namespace} is not valid username")
+                  f"{self.namespace} is not a valid username")
             sys.exit()
 
     def check_branch_exists(self):
@@ -53,8 +53,14 @@ class VersionFileValidate():
         """It checks the version details file naming
         convention that is uploaded by user"""
         obj = OSSPMaster(self.issue_id, self.name)
-        obj.check_issue_exists(self.issue_id)
-        obj.check_repo_exists(self.name)
+        if obj.check_issue_exists(self.issue_id) is False:
+            print("[bold red]Alert! [green]Issue " +
+                    f"[yellow]{self.issue_id} [green]does not exist")
+            sys.exit(1)
+        if obj.check_repo_exists(self.name) is False:
+            print("[bold red]Alert! [green]Repo [yellow]" +
+                  f"{self.name} [green]does not exist")
+            sys.exit()
         obj.check_issue_related_to_project()
         self.check_username()
         self.check_repo_exists(True, self.namespace)

@@ -31,8 +31,14 @@ class OSSPMaster():
         url = f"https://api.github.com/repos/Be-Secure/Be-Secure/issues/{issue_id}"
         try:
             response = requests.head(url, timeout=10)
+            if response.status_code == 403:
+                print(f'[red bold]Alart! [yellow]'\
+                    'GitHub API rate limit '\
+                    'exceeded for this system')
+                sys.exit(1)
             return response.status_code < 400
         except requests.exceptions.RequestException as exc:
+            print(response.text)
             print(exc)
             return False
 
@@ -61,6 +67,11 @@ class OSSPMaster():
         url = f"https://api.github.com/repos/Be-Secure/{name}"
         try:
             response = requests.head(url, timeout=10)
+            if response.status_code == 403:
+                print(f'[red bold]Alart! [yellow]'\
+                    'GitHub API rate limit '\
+                    'exceeded for this system')
+                sys.exit(1)
             return response.status_code < 400
         except requests.exceptions.RequestException as exc:
             print(exc)
