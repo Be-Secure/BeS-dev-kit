@@ -68,7 +68,7 @@ class OSSPMaster():
         try:
             response = requests.head(url, timeout=10)
             if response.status_code == 403:
-                print(f'[red bold]Alert!! [yellow]'\
+                print(f'[red bold]Alert! [yellow]'\
                     'GitHub API rate limit '\
                     'exceeded for this system')
                 sys.exit(1)

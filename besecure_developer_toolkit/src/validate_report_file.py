@@ -31,7 +31,7 @@ class ReportFileValidate():
             + str(issue_id)
         resp = requests.get(url,  timeout=5)
         if resp.status_code == 403:
-            print(f'[red bold]Alert!! [yellow]'\
+            print(f'[red bold]Alert! [yellow]'\
                     'GitHub API rate limit '\
                      'exceeded for this system')
             sys.exit(1)
@@ -48,7 +48,7 @@ class ReportFileValidate():
         try:
             resp = requests.get(url,  timeout=5)
         except requests.exceptions.HTTPError:
-            print(f"[bold red]Alert!! [yellow]HTTP"\
+            print(f"[bold red]Alert! [yellow]HTTP"\
                   " Error: Please try again")
             sys.exit(1)
         except requests.exceptions.ReadTimeout:
