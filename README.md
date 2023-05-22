@@ -20,41 +20,75 @@ If you are running the command for the first time, you will be prompted to provi
 
 Command helps to generate metadata such as OSSP-master file data and version details file.
 
-`$ bes-dev-kit generate metadata`
+`$ bes-dev-kit generate-metadata`
 
-![generate metadata](docs/generate_metadata.gif)
+![generate metadata](docs/generate-metadata.gif)
 
 For more options use `--help` at end.
 
-![metadata help](docs/metadata_help.gif)
+![metadata help](docs/generate-metadata--help.gif)
+
+`Note: For the first time use this command will ask for three extra inputs - OSSPOI_DIR: location of besecure-osspoi-datastore in local system, ASSESSMENT_DIR: location of besecure-assessment-datastore, GITHUB_AUTH_TOKEN`
+
+![metadata first time](docs/generate-metadata-first-time.jpg)
 
 ### Generate Reports
 
-`$ bes-dev-kit generate report <report name>`
+`$ bes-dev-kit generate-report <report name>`
 
-![generate report](docs/generate_report.gif)
+![generate report](docs/generate-report.gif)
 
 `<report name> - scorecard, codeql, criticality_score`
 
 For more options use `--help` at end.
 
-![report help](docs/generate_report_help.gif)
+![report help](docs/generate-report--help.gif)
 
 `Note: All three reports can be generated at once by passing all report names - $ bes-dev-kit generate report scorecard criticality_score codeql`
 
-### Validate Version Details file & report files
+### Download Risk Summary
 
-`$ bes-dev-kit validate version_file`
+Command helps to download risk-summary of Be-Secure listed open source projects in PDF format.
 
-![validate version_file](docs/validate_version_file.gif)
+`$ bes-dev-kit risk-summary`
 
-Command helps to validate the version details file.
+![risk_summary](docs/risk-summary.gif)
 
-`$ bes-dev-kit validate report_file`
+For more options use `--help` at end.
 
-Command helps to validate the report files.
+![risk_summary help](docs/risk-summary--help.gif)
+
+### Validate Version Details file
+
+`$ bes-dev-kit validate-version-file`
+
+![validate version_file](docs/validate-version-file.gif)
+
+Command helps to check version details file naming convention.
 
 For more details use `--help` at end.
+
+![validate version_file help](docs/validate-version-file--help.gif)
+
+### Validate Report files
+
+Command helps to check report files naming convention / if report file available.
+
+`$ bes-dev-kit validate-report-file <report name> ... <report name>`
+
+`Note: Provide listed parameters only. scorecard, codeql, criticality_score, sonarqube, sbom, fossology`
+
+![validate report_file](docs/validate-report-file.gif)
+
+Use bellow command to check all reports at a time.
+
+`$ bes-dev-kit validate-report-file`
+
+![validate report_file](docs/validate-report-file-all-report.gif)
+
+For more details use `--help` at end.
+
+![validate version_file help](docs/validate-report-file--help.gif)
 
 # Setting up locally
 
