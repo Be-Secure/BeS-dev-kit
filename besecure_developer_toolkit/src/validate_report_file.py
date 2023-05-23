@@ -1,3 +1,4 @@
+'''report-file-validate module'''
 import json
 import sys
 import requests
@@ -31,9 +32,9 @@ class ReportFileValidate():
             + str(issue_id)
         resp = requests.get(url,  timeout=5)
         if resp.status_code == 403:
-            print(f'[red bold]Alert! [yellow]'\
-                    'GitHub API rate limit '\
-                     'exceeded for this system')
+            print(f'[red bold]Alert! [yellow]'
+                    f'GitHub API rate limit '
+                    f'exceeded for this system')
             sys.exit(1)
         resp = json.loads(resp.text)
         issue_version_tag = resp["body"]
@@ -48,22 +49,22 @@ class ReportFileValidate():
         try:
             resp = requests.get(url,  timeout=5)
         except requests.exceptions.HTTPError:
-            print(f"[bold red]Alert! [yellow]HTTP"\
-                  " Error: Please try again")
+            print(f"[bold red]Alert! [yellow]HTTP"
+                  f" Error: Please try again")
             sys.exit(1)
         except requests.exceptions.ReadTimeout:
-            print(f"[bold red]Alert! [yellow]"\
-                "Request time out: "\
-                "Please check your internet "\
-                "connection & try again")
+            print(f"[bold red]Alert! [yellow]"
+                f"Request time out: "
+                f"Please check your internet "
+                f"connection & try again")
             sys.exit(1)
         except requests.exceptions.ConnectionError:
-            print(f"[bold red]Alert! [yellow]"\
-                  "Connection error: Please try again")
+            print(f"[bold red]Alert! [yellow]"
+                  f"Connection error: Please try again")
             sys.exit(1)
         except requests.exceptions.RequestException:
-            print(f"[bold red]Alert! [yellow]"\
-                  "Exception request")
+            print(f"[bold red]Alert! [yellow]"
+                  f"Exception request")
             sys.exit(1)
         if resp.text == '404: Not Found':
             return False
@@ -85,11 +86,11 @@ class ReportFileValidate():
             '-scorecard-report.json'
         resp = self.getUrlResponse(url)
         if resp:
-            print(f'[green]{self.name}-{self.version}-'\
+            print(f'[green]{self.name}-{self.version}-'
                   'scorecard-report.json exists')
         else:
-            print(f'[bold red]Alert! [green]scorecard report'\
-                f' not available for [yellow]{self.name},'\
+            print(f'[bold red]Alert! [green]scorecard report'
+                f' not available for [yellow]{self.name},'
                 f' version: {self.version}')
     
     def checkCriticality_score(self):
@@ -107,12 +108,12 @@ class ReportFileValidate():
             '-criticality_score-report.json'
         resp = self.getUrlResponse(url)
         if resp:
-            print(f'[green]{self.name}-{self.version}-'\
-                  'criticality_score-report.json exists')
+            print(f'[green]{self.name}-{self.version}-'
+                  f'criticality_score-report.json exists')
         else:
-            print(f'[bold red]Alert! [green]'\
-                f'criticality_score report not available'\
-                f' for [yellow]{self.name},'\
+            print(f'[bold red]Alert! [green]'
+                f'criticality_score report not available'
+                f' for [yellow]{self.name},'
                 f' version: {self.version}')
     
     def checkCodeql(self):
@@ -130,11 +131,11 @@ class ReportFileValidate():
             '-codeql-report.json'
         resp = self.getUrlResponse(url)
         if resp:
-            print(f'[green]{self.name}-{self.version}-'\
-                  'codeql-report.json exists')
+            print(f'[green]{self.name}-{self.version}-'
+                  f'codeql-report.json exists')
         else:
-            print(f'[bold red]Alert! [green]codeql report not '\
-                f'available for [yellow]{self.name},'\
+            print(f'[bold red]Alert! [green]codeql report not '
+                f'available for [yellow]{self.name},'
                 f' version: {self.version}')
         
     def checkFossology(self):
@@ -149,11 +150,11 @@ class ReportFileValidate():
             + '-' + self.version + '-fossology-report.json'
         resp = self.getUrlResponse(url)
         if resp:
-            print(f'[green]{self.name}-{self.version}-'\
+            print(f'[green]{self.name}-{self.version}-'
                   'fossology-report.json exists')
         else:
-            print(f'[bold red]Alert! [green]fossology report'\
-                f' not available for [yellow]{self.name},'\
+            print(f'[bold red]Alert! [green]fossology report'
+                f' not available for [yellow]{self.name},'
                 f' version: {self.version}')
         
     def checkSonarqube(self):
@@ -171,11 +172,11 @@ class ReportFileValidate():
             '-sonarqube-report.json'
         resp = self.getUrlResponse(url)
         if resp:
-            print(f'[green]{self.name}-{self.version}-'\
+            print(f'[green]{self.name}-{self.version}-'
                   'sonarqube-report.json exists')
         else:
-            print(f'[bold red]Alert! [green]sonarqube report not '\
-            f'available for [yellow]{self.name},'\
+            print(f'[bold red]Alert! [green]sonarqube report not '
+            f'available for [yellow]{self.name},'
             f' version: {self.version}')
 
     def checkSbom(self):
@@ -193,11 +194,11 @@ class ReportFileValidate():
             '-sbom-report.json'
         resp = self.getUrlResponse(url)
         if resp:
-            print(f'[green]{self.name}-{self.version}-'\
+            print(f'[green]{self.name}-{self.version}-'
                   'sbom-report.json exists')
         else:
-            print(f'[bold red]Alert! [green]sbom report not '\
-                f'available for [yellow]{self.name},'\
+            print(f'[bold red]Alert! [green]sbom report not '
+                f'available for [yellow]{self.name},'
                 f' version: {self.version}')
     
     def validate_report_file(self, report_name):
@@ -257,12 +258,12 @@ class ReportFileValidate():
             self.branch
         )
         if obj.check_issue_exists(self.issue_id) is False:
-            print("[bold red]Alert! [green]Issue " +
-                    f"[yellow]{self.issue_id} " +
+            print(f"[bold red]Alert! [green]Issue "
+                    f"[yellow]{self.issue_id} "
                     "[green]does not exist")
             sys.exit(1)
         if obj.check_repo_exists(self.name) is False:
-            print("[bold red]Alert! [green]Repo [yellow]" +
+            print(f"[bold red]Alert! [green]Repo [yellow]"
                   f"{self.name} [green]does not exist")
             sys.exit()
         obj.check_issue_related_to_project()
