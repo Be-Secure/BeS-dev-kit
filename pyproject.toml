@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "besecure-developer-toolkit"
-version = "0.0.4"
+version = "0.0.5"
 description = "cli tool for generating metadata and assessment report for [BeSLighthouse](https://github.com/Be-Secure/BeSLighthouse)."
 authors = ["asa1997 <arunsureshampadath@gmail.com>"]
 readme = "README.md"
