@@ -122,14 +122,14 @@ def report(
     check_if_value_empty()
     set_env_vars()
     if get_all:
-        assessment_reports = ["scorecard", "criticality_score", "codeql"]
+        assessment_reports = ["scorecard", "criticality_score", "codeql", "sbom"]
         for i in assessment_reports:
             obj = Report(issue_id, name, version, i)
             obj.main()
             if update_version_file and i != "codeql":
                 obj.update_version_data()
         raise typer.Exit()
-    if len(reports) > 3:
+    if len(reports) > 4:
         print("[bold red]Alert! [green]Too many arguments")
         raise typer.Exit()
     for i in reports:
@@ -146,6 +146,9 @@ def report(
         elif i == "codeql":
             codeql_obj = Report(issue_id, name, version, i)
             codeql_obj.main()
+        elif i == 'sbom':
+            sbom_obj = Report(issue_id, name, version, i)
+            sbom_obj.main()
         else:
             print(f"[red bold]Alert! [yellow]Invalid report [green]{i}")
             raise typer.Exit()
