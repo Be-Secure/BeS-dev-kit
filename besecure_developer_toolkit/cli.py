@@ -100,7 +100,7 @@ def ossp(
     overwrite: bool = typer.Option(False, help="Overwrite the existing entries")
     ):
     """ Update OSSP-master.json file and add/update version file to osspoi datastore """
-    if platform != "linux" or platform != "linux2":
+    if platform != "linux":
         print("[bold red]BeS-dev-kit is compatible"
               " only with Linux operating systems")
         raise typer.Exit()
@@ -122,7 +122,7 @@ def report(
     update_version_file: bool = typer.Option(True, help="Update scores to version file"),
     ):
     """ Following reports can be generated - scorecard, criticality_score, codeql, sbom"""
-    if platform != "linux" or platform != "linux2":
+    if platform != "linux":
         print("[bold red]BeS-dev-kit is compatible"
               " only with Linux operating systems")
         raise typer.Exit()
@@ -180,7 +180,7 @@ def version_data_naming_convention_validation(
                     ),
     ):
     """ Check version details file naming convention """
-    if platform != "linux" or platform != "linux2":
+    if platform != "linux":
         print("[bold red]BeS-dev-kit is compatible"
               " only with Linux operating systems")
         raise typer.Exit()
@@ -214,7 +214,7 @@ def report_naming_convention_validation(
                     )
 ):
     """ Check report file naming convention """
-    if platform != "linux" or platform != "linux2":
+    if platform != "linux":
         print("[bold red]BeS-dev-kit is compatible"
               " only with Linux operating systems")
         raise typer.Exit()
@@ -261,7 +261,7 @@ def download_consolidate_assessment_report(
                 ),
     ):
     """Download consolidated assessment report in pdf format"""
-    if platform != "linux" or platform != "linux2":
+    if platform != "linux":
         print("[bold red]BeS-dev-kit is compatible"
               " only with Linux operating systems")
         raise typer.Exit()
