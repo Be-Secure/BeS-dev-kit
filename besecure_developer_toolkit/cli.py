@@ -4,6 +4,7 @@ import os
 import ssl
 import json
 import sys
+from sys import platform
 from typing import Optional
 from typing import List
 from rich import print
@@ -99,6 +100,10 @@ def ossp(
     overwrite: bool = typer.Option(False, help="Overwrite the existing entries")
     ):
     """ Update OSSP-master.json file and add/update version file to osspoi datastore """
+    if platform != "linux" or platform != "linux2":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     write_env_vars_file()
     check_if_value_empty()
     set_env_vars()
@@ -117,6 +122,10 @@ def report(
     update_version_file: bool = typer.Option(True, help="Update scores to version file"),
     ):
     """ Following reports can be generated - scorecard, criticality_score, codeql, sbom"""
+    if platform != "linux" or platform != "linux2":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     write_env_vars_file()
     check_if_value_empty()
     set_env_vars()
@@ -171,6 +180,10 @@ def version_data_naming_convention_validation(
                     ),
     ):
     """ Check version details file naming convention """
+    if platform != "linux" or platform != "linux2":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     version_data = VersionFileValidate(issue_id, name, namespace, branch)
     version_data.verify_versiondetails_name()
 
@@ -201,6 +214,10 @@ def report_naming_convention_validation(
                     )
 ):
     """ Check report file naming convention """
+    if platform != "linux" or platform != "linux2":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     report_list = ["scorecard",
                    "criticality_score",
                    "codeql",
@@ -244,6 +261,10 @@ def download_consolidate_assessment_report(
                 ),
     ):
     """Download consolidated assessment report in pdf format"""
+    if platform != "linux" or platform != "linux2":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     report = Generate_report()
     report.download_pdf(OSSP_name, version)
 
