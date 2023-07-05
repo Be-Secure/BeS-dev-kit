@@ -8,6 +8,7 @@ import os
 from urllib.request import urlopen
 from rich import print
 
+
 class Report():
     """
         Create report for scorcard, codeQl, and criticality_score
@@ -20,7 +21,9 @@ class Report():
         self.flag = True
 
     def csv_to_json(self, csv_file_path, json_file_path):
-        
+        '''
+            convert csv data to json data
+        '''
         with open(csv_file_path, 'r') as csv_file:
             csv_data = csv.DictReader(csv_file)
             data_list = list(csv_data)
@@ -35,12 +38,9 @@ class Report():
             cmd = 'criticality_score --repo ' + url + ' --format csv'
             json_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.json'
             csv_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.csv'
-            os.system(cmd + '>> /tmp/' + self.name +
-                       '-' + self.version + '-' + self.report+'.csv')
+            os.system(cmd + '>> ' + csv_file_path)
             self.csv_to_json(csv_file_path, json_file_path)
-            f_critical = open('/tmp/' + self.name +
-                       '-' + self.version + '-' + self.report+'.json',
-                       'r', encoding="utf-8")
+            f_critical = open(json_file_path, 'r', encoding="utf-8")
             data = json.load(f_critical)
             data = data[0]
             f_critical.close()
@@ -63,9 +63,14 @@ class Report():
                 try:
                     sbom_raw_data = open('/tmp/.sbom/sbom-output/_manifest/spdx_2.2/manifest.spdx.json', 'r', encoding="utf-8")
                     data = json.load(sbom_raw_data)
-                except:
+                    sbom_raw_data.close()
+                except ValueError:
+                    # includes simplejson.decoder.JSONDecodeError
+                    print('[bold red]Decoding JSON has failed')
                     self.flag = False
-                sbom_raw_data.close()
+                except FileNotFoundError:
+                    print("[bold red]JSON file Not Found")
+                    self.flag = False
             else:
                 return
         else:
@@ -154,7 +159,7 @@ class Report():
             self.flag = self.command_resp(os.system('mkdir /tmp/.sbom'))
         if not os.path.exists('/tmp/.sbom/sbom-tool-linux-x64') and self.flag:
             self.flag = self.command_resp(os.system('wget https://github.com/microsoft/sbom-tool/releases/download/v1.1.6/sbom-tool-linux-x64 -P /tmp/.sbom/'))
-            self.flag = self.command_resp(os.system('chmod +x /tmp/.sbom/sbom-tool-linux-x64'))     
+            self.flag = self.command_resp(os.system('chmod +x /tmp/.sbom/sbom-tool-linux-x64'))
         self.flag = self.command_resp(os.system('rm -rf /tmp/.sbom/sbom-output'))
         self.flag = self.command_resp(os.system('rm -rf /tmp/.sbom/' + self.name))
         self.flag = self.command_resp(os.system('mkdir /tmp/.sbom/sbom-output'))
@@ -199,7 +204,6 @@ class Report():
             self.write_report(data)
         self.cleanup()
         if not self.flag:
-            print(
-            "[bold red] Alert! Unable to generate "
-            + self.report +
-            " report, please try again")
+            print("[bold red] Alert! Unable to generate "
+                  + self.report +
+                  " report, please try again")

@@ -116,14 +116,15 @@ def report(
     version: str = typer.Option(None, prompt="Enter version", help="Version of OSSP"),
     update_version_file: bool = typer.Option(True, help="Update scores to version file"),
     ):
-    """ Following reports can be generated - scorecard, criticality_score, codeql"""
+    """ Following reports can be generated - scorecard, criticality_score, codeql, sbom"""
     write_env_vars_file()
     check_if_value_empty()
     set_env_vars()
-    assessment_reports = ['scorecard',
-                   'criticality_score',
-                   'codeql',
-                   'sbom']
+    assessment_reports = [
+                'scorecard',
+                'criticality_score',
+                'codeql',
+                'sbom']
     if reports:
         if len(reports) > 4:
             print("[bold red]Alert! [green]Too many arguments")
@@ -131,12 +132,14 @@ def report(
         # check if given parameters are valid
         for i in reports:
             if i.lower() not in assessment_reports:
-                print(f'[red bold]Alart! [green]'\
-                    f'Invalid report'\
+                print('[red bold]Alart! [green]'
+                    'Invalid input'
                     f' [yellow]{i}')
                 sys.exit(1)
         assessment_reports = reports
     for i in assessment_reports:
+        print('\n')
+        print("[bold yellow]Generating " + i.lower() + ' report....')
         obj = Report(issue_id, name, version, i.lower())
         obj.main()
         if update_version_file and (i.lower() == "scorecard" or i.lower() == "criticality_score"):
@@ -205,11 +208,14 @@ def report_naming_convention_validation(
                    'sonarqube',
                    'sbom']
     if reports:
+        if len(reports) > 6:
+            print("[bold red]Alert! [green]Too many arguments")
+            raise typer.Exit()
         # check if given parameters are valid
         for i in reports:
             if i.lower() not in report_list:
-                print(f'[red bold]Alart! [green]'\
-                    f'Invalid report name:'\
+                print('[red bold]Alart! [green]'
+                    'Invalid input:'
                     f' [yellow]{i}')
                 sys.exit(1)
         report_list = reports
