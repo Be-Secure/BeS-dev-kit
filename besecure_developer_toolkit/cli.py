@@ -111,7 +111,6 @@ def ossp(
 @app.command("generate-report")
 def report(
     reports: List[str] = typer.Argument(None),
-    get_all: bool = typer.Option(False, help="Get all 3 reports"),
     issue_id: int = typer.Option(None, prompt="Enter OSSP id", help="OSSP id"),
     name: str = typer.Option(None, prompt="Enter OSSP name", help="OSSP name"),
     version: str = typer.Option(None, prompt="Enter version", help="Version of OSSP"),
@@ -121,37 +120,28 @@ def report(
     write_env_vars_file()
     check_if_value_empty()
     set_env_vars()
-    if get_all:
-        assessment_reports = ["scorecard", "criticality_score", "codeql", "sbom"]
-        for i in assessment_reports:
-            obj = Report(issue_id, name, version, i)
-            obj.main()
-            if update_version_file and i != "codeql":
-                obj.update_version_data()
-        raise typer.Exit()
-    if len(reports) > 4:
-        print("[bold red]Alert! [green]Too many arguments")
-        raise typer.Exit()
-    for i in reports:
-        if i == "scorecard":
-            scorecard_obj = Report(issue_id, name, version, i)
-            scorecard_obj.main()
-            if update_version_file:
-                scorecard_obj.update_version_data()
-        elif i == "criticality_score":
-            criticality_obj = Report(issue_id, name, version, i)
-            criticality_obj.main()
-            if update_version_file:
-                criticality_obj.update_version_data()
-        elif i == "codeql":
-            codeql_obj = Report(issue_id, name, version, i)
-            codeql_obj.main()
-        elif i == 'sbom':
-            sbom_obj = Report(issue_id, name, version, i)
-            sbom_obj.main()
-        else:
-            print(f"[red bold]Alert! [yellow]Invalid report [green]{i}")
+    assessment_reports = ['scorecard',
+                   'criticality_score',
+                   'codeql',
+                   'sbom']
+    if reports:
+        if len(reports) > 4:
+            print("[bold red]Alert! [green]Too many arguments")
             raise typer.Exit()
+        # check if given parameters are valid
+        for i in reports:
+            if i.lower() not in assessment_reports:
+                print(f'[red bold]Alart! [green]'\
+                    f'Invalid report'\
+                    f' [yellow]{i}')
+                sys.exit(1)
+        assessment_reports = reports
+    for i in assessment_reports:
+        obj = Report(issue_id, name, version, i.lower())
+        obj.main()
+        if update_version_file and (i.lower() == "scorecard" or i.lower() == "criticality_score"):
+            obj.update_version_data()
+    raise typer.Exit()
 
 
 @app.command("validate-version-file")
