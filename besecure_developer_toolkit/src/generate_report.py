@@ -143,8 +143,11 @@ class Report():
             remove file from tmp
         """
         if self.report == 'sbom':
-            os.system('rm -rf /tmp/.sbom/sbom-output')
-            os.system('rm -rf /tmp/.sbom/' + self.name)
+            if not self.flag:
+                os.system('rm -rf /tmp/.sbom')
+            else:
+                os.system('rm -rf /tmp/.sbom/sbom-output')
+                os.system('rm -rf /tmp/.sbom/' + self.name)
         elif self.report != "scorecard":
             os.system('rm -rf /tmp/' + self.name +
                        '-' + self.version +
