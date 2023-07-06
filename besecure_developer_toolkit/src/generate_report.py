@@ -63,6 +63,11 @@ class Report():
                 try:
                     sbom_raw_data = open('/tmp/.sbom/sbom-output/_manifest/spdx_2.2/manifest.spdx.json', 'r', encoding="utf-8")
                     data = json.load(sbom_raw_data)
+                    pack_len = len(data['packages'])
+                    if pack_len == 1 and data['packages'][0]['name'] == self.name:
+                        print('[bold red]There were no packages detected '
+                            'during sbom report generation workflow')
+                        self.flag = False
                     sbom_raw_data.close()
                 except ValueError:
                     # includes simplejson.decoder.JSONDecodeError
