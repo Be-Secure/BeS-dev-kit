@@ -1,5 +1,5 @@
-"""Be-Secure Developer Toolkit entry point script."""
-from besecure_developer_toolkit import cli, __app_name__
+"""BeS-dev-kit entry point script."""
+from bes_dev_kit import cli, __app_name__
 
 def main():
     

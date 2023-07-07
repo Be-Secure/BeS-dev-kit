@@ -6,11 +6,11 @@ import os
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib.pagesizes import letter
 from rich import print
-from besecure_developer_toolkit.src.risk_summary.Scorecard_report import scorecard
-from besecure_developer_toolkit.src.risk_summary.Sbom_report import sbom
-from besecure_developer_toolkit.src.risk_summary.License_compliance import fossology
-from besecure_developer_toolkit.src.risk_summary.Static_code_analysis import sonarqube
-from besecure_developer_toolkit.src.risk_summary.Objective import objective
+from bes_dev_kit.src.risk_summary.Scorecard_report import scorecard
+from bes_dev_kit.src.risk_summary.Sbom_report import sbom
+from bes_dev_kit.src.risk_summary.License_compliance import fossology
+from bes_dev_kit.src.risk_summary.Static_code_analysis import sonarqube
+from bes_dev_kit.src.risk_summary.Objective import objective
 
 class Generate_report():
 

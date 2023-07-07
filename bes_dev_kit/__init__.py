@@ -1,4 +1,4 @@
-"""Top-level package for Be-Secure Developer toolkit."""
+"""Top-level package for BeS-dev-kit."""
 # src/__init__.py
 
 __app_name__ = "bes-dev-kit"
