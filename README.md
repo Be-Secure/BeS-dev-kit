@@ -34,7 +34,9 @@ For more options use `--help` at end.
 
 ### Generate Reports
 
-`$ bes-dev-kit generate-report <report name>`
+`$ bes-dev-kit generate-report` -  generate all reports (scorecard, sciticality_score, codeql, sbom)
+
+`$ bes-dev-kit generate-report < report name > ... < report name >` - generate specific report
 
 ![generate report](docs/generate-report.gif)
 
