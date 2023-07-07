@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "bes-dev-kit"
+name = "besecure-developer-toolkit"
 version = "0.0.6"
 description = "cli tool for generating metadata and assessment report for [BeSLighthouse](https://github.com/Be-Secure/BeSLighthouse)."
 authors = ["asa1997 <arunsureshampadath@gmail.com>"]
@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "bes_dev_kit"}]
 
 [tool.poetry.scripts]
-bes-dev-kit = "bes_dev_kit.__main__:cli.app"
+besecure-developer-toolkit = "bes_dev_kit.__main__:cli.app"
 
 [tool.poetry.dependencies]
 python = "^3.10"
