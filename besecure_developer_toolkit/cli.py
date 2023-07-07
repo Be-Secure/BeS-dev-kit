@@ -4,6 +4,7 @@ import os
 import ssl
 import json
 import sys
+from sys import platform
 from typing import Optional
 from typing import List
 from rich import print
@@ -99,6 +100,10 @@ def ossp(
     overwrite: bool = typer.Option(False, help="Overwrite the existing entries")
     ):
     """ Update OSSP-master.json file and add/update version file to osspoi datastore """
+    if platform != "linux":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     write_env_vars_file()
     check_if_value_empty()
     set_env_vars()
@@ -111,44 +116,44 @@ def ossp(
 @app.command("generate-report")
 def report(
     reports: List[str] = typer.Argument(None),
-    get_all: bool = typer.Option(False, help="Get all 3 reports"),
     issue_id: int = typer.Option(None, prompt="Enter OSSP id", help="OSSP id"),
     name: str = typer.Option(None, prompt="Enter OSSP name", help="OSSP name"),
     version: str = typer.Option(None, prompt="Enter version", help="Version of OSSP"),
     update_version_file: bool = typer.Option(True, help="Update scores to version file"),
     ):
-    """ Following reports can be generated - scorecard, criticality_score, codeql"""
+    """ Following reports can be generated - scorecard, criticality_score, codeql, sbom"""
+    if platform != "linux":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     write_env_vars_file()
     check_if_value_empty()
     set_env_vars()
-    if get_all:
-        assessment_reports = ["scorecard", "criticality_score", "codeql"]
-        for i in assessment_reports:
-            obj = Report(issue_id, name, version, i)
-            obj.main()
-            if update_version_file and i != "codeql":
-                obj.update_version_data()
-        raise typer.Exit()
-    if len(reports) > 3:
-        print("[bold red]Alert! [green]Too many arguments")
-        raise typer.Exit()
-    for i in reports:
-        if i == "scorecard":
-            scorecard_obj = Report(issue_id, name, version, i)
-            scorecard_obj.main()
-            if update_version_file:
-                scorecard_obj.update_version_data()
-        elif i == "criticality_score":
-            criticality_obj = Report(issue_id, name, version, i)
-            criticality_obj.main()
-            if update_version_file:
-                criticality_obj.update_version_data()
-        elif i == "codeql":
-            codeql_obj = Report(issue_id, name, version, i)
-            codeql_obj.main()
-        else:
-            print(f"[red bold]Alert! [yellow]Invalid report [green]{i}")
+    assessment_reports = [
+                'scorecard',
+                'criticality_score',
+                'codeql',
+                'sbom']
+    if reports:
+        if len(reports) > 4:
+            print("[bold red]Alert! [green]Too many arguments")
             raise typer.Exit()
+        # check if given parameters are valid
+        for i in reports:
+            if i.lower() not in assessment_reports:
+                print('[red bold]Alart! [green]'
+                    'Invalid input'
+                    f' [yellow]{i}')
+                sys.exit(1)
+        assessment_reports = reports
+    for i in assessment_reports:
+        print('\n')
+        print("[bold yellow]Generating " + i.lower() + ' report....')
+        obj = Report(issue_id, name, version, i.lower())
+        obj.main()
+        if update_version_file and (i.lower() == "scorecard" or i.lower() == "criticality_score"):
+            obj.update_version_data()
+    raise typer.Exit()
 
 
 @app.command("validate-version-file")
@@ -175,6 +180,10 @@ def version_data_naming_convention_validation(
                     ),
     ):
     """ Check version details file naming convention """
+    if platform != "linux":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     version_data = VersionFileValidate(issue_id, name, namespace, branch)
     version_data.verify_versiondetails_name()
 
@@ -205,6 +214,10 @@ def report_naming_convention_validation(
                     )
 ):
     """ Check report file naming convention """
+    if platform != "linux":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     report_list = ["scorecard",
                    "criticality_score",
                    "codeql",
@@ -212,11 +225,14 @@ def report_naming_convention_validation(
                    'sonarqube',
                    'sbom']
     if reports:
+        if len(reports) > 6:
+            print("[bold red]Alert! [green]Too many arguments")
+            raise typer.Exit()
         # check if given parameters are valid
         for i in reports:
             if i.lower() not in report_list:
-                print(f'[red bold]Alart! [green]'\
-                    f'Invalid report name:'\
+                print('[red bold]Alart! [green]'
+                    'Invalid input:'
                     f' [yellow]{i}')
                 sys.exit(1)
         report_list = reports
@@ -245,6 +261,10 @@ def download_consolidate_assessment_report(
                 ),
     ):
     """Download consolidated assessment report in pdf format"""
+    if platform != "linux":
+        print("[bold red]BeS-dev-kit is compatible"
+              " only with Linux operating systems")
+        raise typer.Exit()
     report = Generate_report()
     report.download_pdf(OSSP_name, version)
 
