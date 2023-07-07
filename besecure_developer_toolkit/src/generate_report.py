@@ -35,10 +35,11 @@ class Report():
             create json report for criticality_score, codeql, and scorecard
         """
         if self.report == "criticality_score":
-            cmd = 'criticality_score --repo ' + url + ' --format csv'
+            command = 'criticality_score --repo ' + url + ' --format csv'
             json_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.json'
             csv_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.csv'
-            os.system(cmd + '>> ' + csv_file_path)
+            command = command + f" > {csv_file_path} 2>/dev/null"
+            os.system(command)
             self.csv_to_json(csv_file_path, json_file_path)
             f_critical = open(json_file_path, 'r', encoding="utf-8")
             data = json.load(f_critical)
