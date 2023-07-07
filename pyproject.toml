@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bes-dev-kit"
-version = "0.0.5"
+version = "0.0.6"
 description = "cli tool for generating metadata and assessment report for [BeSLighthouse](https://github.com/Be-Secure/BeSLighthouse)."
 authors = ["asa1997 <arunsureshampadath@gmail.com>"]
 readme = "README.md"
