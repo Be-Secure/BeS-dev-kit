@@ -4,8 +4,8 @@ import sys
 import requests
 from urllib.request import urlopen
 from urllib.error import HTTPError
-from besecure_developer_toolkit.src.validate_version_file import VersionFileValidate
-from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
+from bes_dev_kit.src.validate_version_file import VersionFileValidate
+from bes_dev_kit.src.create_ossp_master import OSSPMaster
 from rich import print
 
 class ReportFileValidate():

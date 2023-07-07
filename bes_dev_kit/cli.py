@@ -1,4 +1,4 @@
-"""This module provides the Be-Secure Developer Toolkit CLI."""
+"""This module provides the BeS-dev-kit CLI."""
 # src/cli.py
 import os
 import ssl
@@ -9,13 +9,13 @@ from typing import Optional
 from typing import List
 from rich import print
 import typer
-from besecure_developer_toolkit import __app_name__, __version__
-from besecure_developer_toolkit.src.create_ossp_master import OSSPMaster
-from besecure_developer_toolkit.src.create_version_data import Version
-from besecure_developer_toolkit.src.generate_report import Report
-from besecure_developer_toolkit.src.validate_version_file import VersionFileValidate
-from besecure_developer_toolkit.src.risk_assessment import Generate_report
-from besecure_developer_toolkit.src.validate_report_file import ReportFileValidate
+from bes_dev_kit import __app_name__, __version__
+from bes_dev_kit.src.create_ossp_master import OSSPMaster
+from bes_dev_kit.src.create_version_data import Version
+from bes_dev_kit.src.generate_report import Report
+from bes_dev_kit.src.validate_version_file import VersionFileValidate
+from bes_dev_kit.src.risk_assessment import Generate_report
+from bes_dev_kit.src.validate_report_file import ReportFileValidate
 
 ssl._create_default_https_context = ssl._create_stdlib_context
 
