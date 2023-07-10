@@ -2,7 +2,7 @@
 # src/__init__.py
 
 __app_name__ = "bes-dev-kit"
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 (
     SUCCESS,
