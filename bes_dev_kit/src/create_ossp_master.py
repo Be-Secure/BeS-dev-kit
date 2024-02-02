@@ -225,7 +225,8 @@ class OSSPMaster():
                     elif i == "bes_technology_stack":
                         ossp_data[i] = self.write_tech_stack(self.issue_id)
                     elif i == "project_repos":
-                        ossp_data[i] = self.write_project_repos_data(project_data)
+                        if "parent" in project_data:
+                            ossp_data[i] = self.write_project_repos_data(project_data)
                     elif i == "tags":
                         ossp_data[i] = self.write_tags(self.issue_id)
                     elif i == "language":
