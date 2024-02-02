@@ -27,7 +27,7 @@ def write_env_vars_file():
     vars_file_path = f"{vars_dir_path}/bes-dev-kit.json"
     env_vars = {
         "GITHUB_ORG": "Be-Secure",
-        "OSSPOI_DIR": "",
+        "ASSETS_DIR": "",
         "ASSESSMENT_DIR": "",
         "GITHUB_AUTH_TOKEN": ""
     }
@@ -67,6 +67,7 @@ def check_if_value_empty():
     with open(vars_file_path, 'r+', encoding="utf-8") as file_pointer:
         env_vars = json.load(file_pointer)
         for key, value in env_vars.items():
+
             if value == "":
                 new_value = prompt_user(key, value)
                 env_vars[key] = new_value
@@ -99,7 +100,7 @@ def ossp(
     name: str = typer.Option(None, prompt="Enter OSSP name", help="OSSP name"),
     overwrite: bool = typer.Option(False, help="Overwrite the existing entries")
     ):
-    """ Update OSSP-master.json file and add/update version file to osspoi datastore """
+    """ Update project-metadata.json file and add/update version file to osspoi datastore """
     if platform != "linux":
         print("[bold red]BeS-dev-kit is compatible"
               " only with Linux operating systems")

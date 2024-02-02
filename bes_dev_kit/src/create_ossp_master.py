@@ -172,10 +172,10 @@ class OSSPMaster():
         file_pointer.truncate()
         if overwrite:
             print("[bold red]Alert! [green]Data for " +
-                f"[yellow]{self.name} [green] in OSSP-Master.json has been overwritten")
+                f"[yellow]{self.name} [green] in project-metadata.json has been overwritten")
         else:
             print("[bold red]Alert! [green]Added " +
-                f"[yellow]{self.name} [green]to OSSP-Master.json")
+                f"[yellow]{self.name} [green]to project-metadata.json")
 
 
     def generate_ossp_master(self, overwrite: bool):
@@ -191,15 +191,15 @@ class OSSPMaster():
                   f"{self.name} [green]does not exist")
             sys.exit()
         self.check_issue_related_to_project()
-        osspoi_dir = os.environ['OSSPOI_DIR']
+        osspoi_dir = os.environ['ASSETS_DIR']
         write_flag = True
-        with open(f"{osspoi_dir}/OSSP-Master.json", "r+", encoding="utf-8") as file_pointer:
+        with open(f"{osspoi_dir}/projects/project-metadata.json", "r+", encoding="utf-8") as file_pointer:
             ossp_master_json = json.load(file_pointer)
             if not overwrite:
                 for i in range(len(ossp_master_json["items"])):
                     if ossp_master_json["items"][i]["id"] == self.issue_id:
                         print("[bold red]Alert! [green]Entry for "+str(self.issue_id) +
-                            "-"+self.name+" already present under OSSP-Master.json")
+                            "-"+self.name+" already present under project-metadata.json")
                         write_flag = False
                         break
             if write_flag:

@@ -114,12 +114,12 @@ class Report():
         """
             provide versiondetails for version and read from assessment data store
         """
-        osspoi_dir = os.environ['OSSPOI_DIR']
+        osspoi_dir = os.environ['ASSETS_DIR']
         assessment_dir = os.environ['ASSESSMENT_DIR']
         report_file = open(assessment_dir+'/'+self.name+'/'+self.version+'/'+self.report +
                             '/'+self.name + '-' + self.version +
                             '-' + self.report + '-report.json', "r", encoding="utf-8")
-        version_file = open(osspoi_dir+"/version_details/"+str(self.issue_id) +
+        version_file = open(osspoi_dir+"/projects/project-version/"+str(self.issue_id) +
                             "-" + self.name + "-" "Versiondetails.json", "r+", encoding="utf-8")
 
         score_data = json.load(report_file)

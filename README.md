@@ -28,7 +28,7 @@ For more options use `--help` at end.
 
 ![metadata help](docs/generate-metadata--help.gif)
 
-`Note: For the first time use this command will ask for three extra inputs - OSSPOI_DIR: location of besecure-osspoi-datastore in local system, ASSESSMENT_DIR: location of besecure-assessment-datastore, GITHUB_AUTH_TOKEN`
+`Note: For the first time use this command will ask for three extra inputs - ASSETS_DIR: location of besecure-osspoi-datastore in local system, ASSESSMENT_DIR: location of besecure-assessment-datastore, GITHUB_AUTH_TOKEN`
 
 ![metadata first time](docs/generate-metadata-first-time.jpg)
 
