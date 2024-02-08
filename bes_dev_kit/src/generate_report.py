@@ -10,9 +10,6 @@ from distutils.version import LooseVersion
 from urllib.request import urlopen
 from rich import print
 
-class GoVersionError(Exception):
-    """Base class for other exceptions"""
-    pass
 class Report():
     """
         Create report for scorcard, codeQl, and criticality_score

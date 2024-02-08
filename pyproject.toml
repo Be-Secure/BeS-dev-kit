@@ -16,7 +16,6 @@ pytest = "^7.3.0"
 requests = "^2.29.0"
 reportlab = "^3.6.8" 
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
