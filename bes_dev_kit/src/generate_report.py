@@ -39,15 +39,17 @@ class Report():
             create json report for criticality_score, codeql, and scorecard
         """
         if self.report == "criticality_score":
-            token = os.environ['GITHUB_AUTH_TOKEN']
             json_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.json'
             command = 'criticality_score -depsdev-disable -format json https://' + url
             command = command + f" > {json_file_path} 2>/dev/null"
             try:
-                res = subprocess.run('go version', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
-                print(" return code: ", res.returncode, " stdout: ", res.stdout, " stderr: ",res.stderr)
+                res = subprocess.run('go version',
+                                     shell=True,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE,
+                                     check=True)
             except:
-                print('[bold green]Please enter root credentials...')
+                print('[bold green]Please enter root password...')
                 os.system('snap install go --classic')
                 
             os.system(f'''go install github.com/ossf/criticality_score/cmd/criticality_score@latest
