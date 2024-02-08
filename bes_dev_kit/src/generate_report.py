@@ -6,7 +6,6 @@ import csv
 import sys
 import os
 import subprocess
-from distutils.version import LooseVersion
 from urllib.request import urlopen
 from rich import print
 
