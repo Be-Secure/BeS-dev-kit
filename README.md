@@ -10,7 +10,7 @@ BeS-dev-kit is a cli tool for generating metadata and assessment report for [BeS
 
 # Installation
 
-`$ python3 -m pip install bes-dev-kit`
+`$ python3 -m pip install besecure-developer-toolkit`
 
 # Usage
 
