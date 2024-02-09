@@ -5,9 +5,9 @@ import json
 import csv
 import sys
 import os
+import subprocess
 from urllib.request import urlopen
 from rich import print
-
 
 class Report():
     """
@@ -35,15 +35,27 @@ class Report():
             create json report for criticality_score, codeql, and scorecard
         """
         if self.report == "criticality_score":
-            command = 'criticality_score --repo ' + url + ' --format csv'
             json_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.json'
-            csv_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.csv'
-            command = command + f" > {csv_file_path} 2>/dev/null"
-            os.system(command)
-            self.csv_to_json(csv_file_path, json_file_path)
+            command = 'criticality_score -depsdev-disable -format json https://' + url
+            command = command + f" > {json_file_path} 2>/dev/null"
+            try:
+                res = subprocess.run('go version',
+                                     shell=True,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE,
+                                     check=True)
+            except:
+                print('[bold green]Please enter root password...')
+                os.system('snap install go --classic')
+                
+            os.system(f'''go install github.com/ossf/criticality_score/cmd/criticality_score@latest
+                export GOPATH=$HOME/go
+                export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+                export GITHUB_AUTH_TOKEN={ os.environ['GITHUB_AUTH_TOKEN'] }
+                { command }
+            ''')
             f_critical = open(json_file_path, 'r', encoding="utf-8")
             data = json.load(f_critical)
-            data = data[0]
             f_critical.close()
         elif self.report == "codeql":
             token = os.environ['GITHUB_AUTH_TOKEN']
@@ -126,7 +138,10 @@ class Report():
         if self.report == "scorecard":
             score = score_data["score"]
         elif self.report == "criticality_score":
-            score = score_data["criticality_score"]
+            if 'default_score' in score_data:
+                score = score_data["default_score"]
+            elif 'criticality_score' in score_data:
+                score = score_data["criticality_score"]
 
         version_data = json.load(version_file)
         for i in range(len(version_data)):
