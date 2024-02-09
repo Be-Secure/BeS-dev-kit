@@ -5,9 +5,9 @@ import json
 import csv
 import sys
 import os
+import subprocess
 from urllib.request import urlopen
 from rich import print
-
 
 class Report():
     """
@@ -35,15 +35,27 @@ class Report():
             create json report for criticality_score, codeql, and scorecard
         """
         if self.report == "criticality_score":
-            command = 'criticality_score --repo ' + url + ' --format csv'
             json_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.json'
-            csv_file_path = '/tmp/' + self.name + '-' + self.version + '-' + self.report+'.csv'
-            command = command + f" > {csv_file_path} 2>/dev/null"
-            os.system(command)
-            self.csv_to_json(csv_file_path, json_file_path)
+            command = 'criticality_score -depsdev-disable -format json https://' + url
+            command = command + f" > {json_file_path} 2>/dev/null"
+            try:
+                res = subprocess.run('go version',
+                                     shell=True,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE,
+                                     check=True)
+            except:
+                print('[bold green]Please enter root password...')
+                os.system('snap install go --classic')
+                
+            os.system(f'''go install github.com/ossf/criticality_score/cmd/criticality_score@latest
+                export GOPATH=$HOME/go
+                export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+                export GITHUB_AUTH_TOKEN={ os.environ['GITHUB_AUTH_TOKEN'] }
+                { command }
+            ''')
             f_critical = open(json_file_path, 'r', encoding="utf-8")
             data = json.load(f_critical)
-            data = data[0]
             f_critical.close()
         elif self.report == "codeql":
             token = os.environ['GITHUB_AUTH_TOKEN']
@@ -86,6 +98,7 @@ class Report():
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(exc_type, fname, exc_tb.tb_lineno)
+                print("[bold red]Please configure scorecard action in GitHub workflow")
                 sys.exit(str(err))
             data = json.loads(raw_data.read())
 
@@ -114,19 +127,22 @@ class Report():
         """
             provide versiondetails for version and read from assessment data store
         """
-        osspoi_dir = os.environ['OSSPOI_DIR']
+        osspoi_dir = os.environ['ASSETS_DIR']
         assessment_dir = os.environ['ASSESSMENT_DIR']
         report_file = open(assessment_dir+'/'+self.name+'/'+self.version+'/'+self.report +
                             '/'+self.name + '-' + self.version +
                             '-' + self.report + '-report.json', "r", encoding="utf-8")
-        version_file = open(osspoi_dir+"/version_details/"+str(self.issue_id) +
+        version_file = open(osspoi_dir+"/projects/project-version/"+str(self.issue_id) +
                             "-" + self.name + "-" "Versiondetails.json", "r+", encoding="utf-8")
 
         score_data = json.load(report_file)
         if self.report == "scorecard":
             score = score_data["score"]
         elif self.report == "criticality_score":
-            score = score_data["criticality_score"]
+            if 'default_score' in score_data:
+                score = score_data["default_score"]
+            elif 'criticality_score' in score_data:
+                score = score_data["criticality_score"]
 
         version_data = json.load(version_file)
         for i in range(len(version_data)):

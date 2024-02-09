@@ -96,7 +96,7 @@ class Version():
         """
             generate version details page in osspoi_datastore
         """
-        osspoi_dir = os.environ['OSSPOI_DIR']
+        osspoi_dir = os.environ['ASSETS_DIR']
         version_data_new = {
             "version": "",
             "release_date": "",
@@ -112,7 +112,7 @@ class Version():
             version_data_new["release_date"] = "Not Available"
         else:
             version_data_new["release_date"] = date
-        path = osspoi_dir+"/version_details/" + \
+        path = osspoi_dir+"/projects/project-version/" + \
             str(self.issue_id) + "-" + self.name + "-" "Versiondetails.json"
         if os.path.exists(path):
             with open(path, "r+", encoding="utf-8") as file_pointer:
