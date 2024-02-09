@@ -5,6 +5,7 @@ import ssl
 import json
 import sys
 from sys import platform
+import time
 from typing import Optional
 from typing import List
 from rich import print
@@ -58,6 +59,13 @@ def prompt_user(key, value):
             break
     return value
 
+def check_path(path) :   
+    if ((path.endswith('besecure-assets-store')
+        or path.endswith('besecure-assessment-datastore'))
+        and os.path.exists(path)
+    ) : return False
+    else : return True
+
 def check_if_value_empty():
     """Checks if any env var is empty. Calls function prompt_user if empty
     """
@@ -67,11 +75,11 @@ def check_if_value_empty():
     with open(vars_file_path, 'r+', encoding="utf-8") as file_pointer:
         env_vars = json.load(file_pointer)
         for key, value in env_vars.items():
-
-            if value == "":
+            if value == "" or (key != 'GITHUB_AUTH_TOKEN' and key != 'GITHUB_ORG' and check_path(value)) :
                 new_value = prompt_user(key, value)
                 env_vars[key] = new_value
         file_pointer.seek(0)
+        file_pointer.truncate()
         file_pointer.write(json.dumps(env_vars, indent=4))
 
 def set_env_vars():
