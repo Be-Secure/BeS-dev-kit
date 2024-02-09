@@ -46,7 +46,7 @@ For more options use `--help` at end.
 
 ![report help](docs/generate-report--help.gif)
 
-`Note: All three reports can be generated at once by passing all report names - $ bes-dev-kit generate report scorecard criticality_score codeql`
+**Note:** If an older version of **criticality_score** is already installed in the system (< **v2.0.0**), Please uninstall it using `pip uninstall criticality-score`.
 
 ### Download Risk Summary
 
