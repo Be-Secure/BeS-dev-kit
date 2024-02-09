@@ -146,7 +146,7 @@ def test_vdnc_with_invalid_project():
 
 
 def test_vdnc_check_under_OSSPMaster():
-    """check if mentioned project exists under OSSP-master.json file"""
+    """check if mentioned project exists under project-metadata.json file"""
     issue_id = 405
     name = "OpenIDM"
     namespace = "pramit-d"

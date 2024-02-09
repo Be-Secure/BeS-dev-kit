@@ -85,13 +85,13 @@ def test_metadata():
     issue_id = "136"
     name = "fastjson"
     version = "version"
-    osspoi = os.environ['OSSPOI_DIR']
+    osspoi = os.environ['ASSETS_DIR']
     result = runner.invoke(app, ["generate", "metadata"], input=issue_id+"\n"+name+"\n")
     assert result.exit_code == 0
     version_file = os.path.exists(f'{osspoi}/version_details/{issue_id}-{name}-Versiondetails.json')
-    ossp_master_file = os.path.exists(f'{osspoi}/OSSP-Master.json')
+    ossp_master_file = os.path.exists(f'{osspoi}/projects/project-metadata.json')
     print(ossp_master_file)
-    f = open(f'{osspoi}/OSSP-Master.json')
+    f = open(f'{osspoi}/projects/project-metadata.json')
     ossp_master_data = json.load(f)
     for i in range(len(ossp_master_data["items"])):
         if ossp_master_data["items"][i]["issue_id"] == int(issue_id) and ossp_master_data["items"][i]["name"] == name:
@@ -106,7 +106,7 @@ def test_metadata():
 def test_version_file_not_empty():
     issue_id = "136"
     name = "fastjson"
-    osspoi = os.environ['OSSPOI_DIR']
+    osspoi = os.environ['ASSETS_DIR']
     result = runner.invoke(app, ["generate", "metadata"], input=issue_id+"\n"+name+"\n")
     assert result.exit_code == 0
     size = os.path.getsize(f'{osspoi}/version_details/{issue_id}-{name}-Versiondetails.json')
@@ -123,7 +123,7 @@ def test_overwrite():
         "scorecard": "Not Available",
         "cve_details": "Not Available"
     }]
-    osspoi = os.environ['OSSPOI_DIR']
+    osspoi = os.environ['ASSETS_DIR']
     result = runner.invoke(app, ["generate", "metadata", "--overwrite"], input=issue_id+"\n"+name+"\n")
     assert result.exit_code == 0
     f = open(f'{osspoi}/version_details/{issue_id}-{name}-Versiondetails.json')
@@ -134,7 +134,7 @@ def test_without_overwrite():
     issue_id = "136"
     name = "fastjson"
     version = "1.2.24"
-    osspoi = os.environ['OSSPOI_DIR']
+    osspoi = os.environ['ASSETS_DIR']
     f = open(f"{osspoi}/version_details/{issue_id}-{name}-Versiondetails.json")
     original_version_data = json.load(f)
     for i in range(len(original_version_data)):
@@ -158,10 +158,10 @@ def test_without_overwrite():
 def test_issue_project_mismatch():
     issue_id = 137
     name = "fastjson"
-    osspoi = os.environ['OSSPOI_DIR']
+    osspoi = os.environ['ASSETS_DIR']
     result = runner.invoke(app, ["generate", "metadata"], input=str(issue_id)+"\n"+name+"\n")
     assert result.exit_code == 0
-    f = open(f'{osspoi}/OSSP-Master.json')
+    f = open(f'{osspoi}/projects/project-metadata.json')
     ossp_master_json = json.load(f)
     for i in range(len(ossp_master_json["items"])): 
         if ossp_master_json["items"][i]["issue_id"] == issue_id and ossp_master_json["items"][i]["name"] == name:
@@ -178,7 +178,7 @@ def test_version_alpha():
     name = "SYCLomatic-test"
     version = "alpha"
     release_date = "Not Available"
-    osspoi = os.environ['OSSPOI_DIR']
+    osspoi = os.environ['ASSETS_DIR']
     result = runner.invoke(app, ["generate", "metadata"], input=str(issue_id)+"\n"+name+"\n")
     assert result.exit_code == 0
     f = open(f"{osspoi}/version_details/{issue_id}-{name}-Versiondetails.json")
